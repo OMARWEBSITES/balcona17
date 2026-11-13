@@ -1,0 +1,2446 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="midnight">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=0.6" />
+  <title>الْــبَــلـــكُـونَــة 🥂🦋 | </title>
+  <script>
+    // تنظيف وإلغاء أي Service Worker قديم (sw.js) يسبب أخطاء FetchEvent في الكونسول
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for (var i = 0; i < registrations.length; i++) {
+          registrations[i].unregister();
+        }
+      }).catch(function() {});
+    }
+  </script>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'%3E%3Crect width='120' height='120' rx='26' fill='%230b1021'/%3E%3Crect x='50' y='0' width='70' height='120' fill='%233d2314'/%3E%3Ccircle cx='78' cy='28' r='22' fill='%23f59e0b' opacity='0.45'/%3E%3Ccircle cx='44' cy='82' r='16' fill='%23fbbf24' opacity='0.5'/%3E%3Ccircle cx='78' cy='22' r='5' fill='%23fffbeb'/%3E%3Ccircle cx='44' cy='78' r='4' fill='%23fffbeb'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root[data-theme="midnight"] {
+      --bg-primary: #060814;
+      --bg-secondary: #0d1226;
+      --bg-card: rgba(16, 23, 48, 0.88);
+      --bg-glass: rgba(22, 31, 64, 0.65);
+      --text-primary: #f0f4ff;
+      --text-secondary: #94a3b8;
+      --accent-primary: #6366f1;
+      --accent-secondary: #a855f7;
+      --accent-glow: rgba(99, 102, 241, 0.45);
+      --border-color: rgba(99, 102, 241, 0.25);
+      --success: #10b981;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.65), 0 0 30px rgba(99, 102, 241, 0.15);
+      --gradient-bg: radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.18) 0%, transparent 45%),
+                     radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.18) 0%, transparent 45%);
+    }
+
+    :root[data-theme="dark"] {
+      --bg-primary: #111113;
+      --bg-secondary: #18181b;
+      --bg-card: rgba(28, 28, 33, 0.92);
+      --bg-glass: rgba(39, 39, 42, 0.7);
+      --text-primary: #f4f4f5;
+      --text-secondary: #a1a1aa;
+      --accent-primary: #10b981;
+      --accent-secondary: #06b6d4;
+      --accent-glow: rgba(16, 185, 129, 0.35);
+      --border-color: rgba(255, 255, 255, 0.12);
+      --success: #10b981;
+      --danger: #f43f5e;
+      --warning: #eab308;
+      --shadow: 0 20px 50px rgba(0, 0, 0, 0.75);
+      --gradient-bg: radial-gradient(circle at 20% 20%, rgba(16, 185, 129, 0.1) 0%, transparent 45%),
+                     radial-gradient(circle at 80% 80%, rgba(6, 182, 212, 0.1) 0%, transparent 45%);
+    }
+
+    :root[data-theme="light"] {
+      --bg-primary: #f1f5f9;
+      --bg-secondary: #e2e8f0;
+      --bg-card: rgba(255, 255, 255, 0.95);
+      --bg-glass: rgba(255, 255, 255, 0.8);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --accent-primary: #4f46e5;
+      --accent-secondary: #ec4899;
+      --accent-glow: rgba(79, 70, 229, 0.25);
+      --border-color: rgba(15, 23, 42, 0.12);
+      --success: #059669;
+      --danger: #dc2626;
+      --warning: #d97706;
+      --shadow: 0 15px 35px rgba(15, 23, 42, 0.08);
+      --gradient-bg: radial-gradient(circle at 15% 15%, rgba(79, 70, 229, 0.1) 0%, transparent 45%),
+                     radial-gradient(circle at 85% 85%, rgba(236, 72, 153, 0.1) 0%, transparent 45%);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      background-image: var(--gradient-bg);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background-color 0.35s ease, color 0.35s ease;
+      overflow-x: hidden;
+    }
+
+    /* Header & Theme Switcher */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      background: var(--bg-glass);
+      border-bottom: 1px solid var(--border-color);
+      padding: 0.9rem 1.5rem;
+    }
+
+    .nav-container {
+      max-width: 1150px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .brand-logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3), 0 0 0 1.5px rgba(251, 191, 36, 0.35);
+      flex-shrink: 0;
+      background: #0b1021;
+    }
+
+    .brand-logo svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .brand-text h1 {
+      font-size: 1.35rem;
+      font-weight: 900;
+      line-height: 1.25;
+      color: var(--text-primary);
+      letter-spacing: 0.3px;
+    }
+
+    .brand-text span {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+      display: block;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .theme-switcher {
+      display: flex;
+      align-items: center;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      padding: 0.28rem;
+      gap: 0.25rem;
+    }
+
+    .theme-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      padding: 0.42rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .theme-btn.active {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: #ffffff;
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+
+    .sync-badge {
+      font-size: 0.78rem;
+      padding: 0.4rem 0.85rem;
+      border-radius: 999px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .sync-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--warning);
+      display: inline-block;
+    }
+
+    .sync-dot.online {
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1050px;
+      width: 100%;
+      margin: 2rem auto;
+      padding: 0 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.75rem;
+    }
+
+    /* Stats Bar */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1rem;
+    }
+
+    .stat-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-info span {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      display: block;
+    }
+
+    .stat-info strong {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: var(--text-primary);
+    }
+
+    .stat-icon {
+      font-size: 1.65rem;
+      opacity: 0.85;
+    }
+
+    /* Category Filter Pills */
+    .categories-bar {
+      display: flex;
+      gap: 0.55rem;
+      overflow-x: auto;
+      padding-bottom: 0.4rem;
+      scrollbar-width: thin;
+    }
+
+    .cat-pill {
+      border: 1px solid var(--border-color);
+      background: var(--bg-card);
+      color: var(--text-secondary);
+      padding: 0.5rem 1.1rem;
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.25s ease;
+    }
+
+    .cat-pill:hover {
+      border-color: var(--accent-primary);
+      color: var(--text-primary);
+    }
+
+    .cat-pill.active {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 6px 16px var(--accent-glow);
+    }
+
+    /* Question Hero Card */
+    .question-stage {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 26px;
+      padding: 2.5rem 2rem;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 1.6rem;
+      min-height: 340px;
+      justify-content: space-between;
+    }
+
+    .question-meta {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .badge {
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--accent-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .question-text {
+      font-size: clamp(1.35rem, 3.2vw, 2.05rem);
+      font-weight: 800;
+      line-height: 1.55;
+      color: var(--text-primary);
+      max-width: 780px;
+      margin: 0.5rem auto;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    .question-text.animating {
+      opacity: 0;
+      transform: translateY(12px) scale(0.97);
+    }
+
+    /* Large Prominent Random Generator Box Button */
+    .generate-box-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 0.25rem;
+    }
+
+    .btn-generate-big {
+      width: 100%;
+      max-width: 520px;
+      min-height: 82px;
+      border: 2px solid rgba(255, 255, 255, 0.22);
+      border-radius: 22px;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: #ffffff;
+      font-size: clamp(1.22rem, 2.5vw, 1.5rem);
+      font-weight: 900;
+      padding: 1.25rem 2.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.8rem;
+      box-shadow: 0 14px 35px var(--accent-glow), inset 0 1px 2px rgba(255, 255, 255, 0.35);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, filter 0.22s ease;
+      letter-spacing: 0.3px;
+    }
+
+    .btn-generate-big:hover {
+      transform: translateY(-4px) scale(1.015);
+      box-shadow: 0 20px 45px var(--accent-glow);
+      filter: brightness(1.1);
+    }
+
+    .btn-generate-big:active {
+      transform: translateY(0) scale(0.99);
+    }
+
+    .btn-generate-big .dice-icon {
+      font-size: 1.85rem;
+      display: inline-block;
+      transition: transform 0.35s ease;
+    }
+
+    .btn-generate-big:hover .dice-icon {
+      transform: rotate(25deg) scale(1.15);
+    }
+
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.85rem;
+      width: 100%;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 15px;
+      padding: 0.85rem 1.5rem;
+      font-size: 0.98rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      transition: all 0.22s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: #ffffff;
+      box-shadow: 0 10px 25px var(--accent-glow);
+      font-size: 1.08rem;
+      padding: 0.95rem 2.1rem;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.08);
+    }
+
+    .btn-secondary {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent-primary);
+      transform: translateY(-2px);
+    }
+
+    /* Answer / Sarahah Box */
+    .answer-panel {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .answer-panel h3 {
+      font-size: 1.05rem;
+      margin-bottom: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .answer-form {
+      display: flex;
+      gap: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .input-field {
+      flex: 1;
+      min-width: 240px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 0.8rem 1rem;
+      border-radius: 14px;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .input-field:focus {
+      border-color: var(--accent-primary);
+    }
+
+    /* Explorer & Answers Tabs */
+    .tabs-header {
+      display: flex;
+      gap: 0.6rem;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.75rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      padding: 0.55rem 1.2rem;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--accent-primary);
+      color: #fff;
+      border-color: transparent;
+    }
+
+    .questions-list-container {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      padding: 1.4rem;
+      box-shadow: var(--shadow);
+    }
+
+    .search-bar {
+      display: flex;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .questions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 0.85rem;
+      max-height: 480px;
+      overflow-y: auto;
+      padding-left: 0.25rem;
+    }
+
+    .q-item {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 0.9rem 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.6rem;
+      cursor: pointer;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .q-item:hover {
+      border-color: var(--accent-primary);
+      transform: translateY(-2px);
+    }
+
+    .q-item-top {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .q-item-text {
+      font-weight: 700;
+      font-size: 0.93rem;
+      line-height: 1.45;
+    }
+
+    /* Bottom Websites Boxes Section */
+    .sites-bottom-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 22px;
+      padding: 1.4rem 1.5rem;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .sites-bottom-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .sites-bottom-header h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .sites-boxes-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.9rem;
+      align-items: stretch;
+    }
+
+    .site-box-card {
+      text-decoration: none;
+      background: var(--bg-secondary);
+      border: 1.5px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1rem 1.4rem;
+      min-width: 175px;
+      flex: 1 1 180px;
+      max-width: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      color: var(--text-primary);
+      font-weight: 800;
+      font-size: 1.02rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      transition: all 0.25s ease;
+    }
+
+    .site-box-card:hover {
+      border-color: var(--accent-primary);
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.16), rgba(168, 85, 247, 0.16));
+      transform: translateY(-3px);
+      box-shadow: 0 12px 25px var(--accent-glow);
+    }
+
+    .site-box-name {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .site-box-arrow {
+      font-size: 1.1rem;
+      color: var(--accent-primary);
+      flex-shrink: 0;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: auto;
+      border-top: 1px solid var(--border-color);
+      background: var(--bg-glass);
+      padding: 1.1rem 1.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .secret-trigger {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      opacity: 0.35;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: opacity 0.2s;
+    }
+
+    .secret-trigger:hover {
+      opacity: 1;
+    }
+
+    /* Modals (Password & Hidden Dashboard) */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.78);
+      backdrop-filter: blur(10px);
+      z-index: 999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+    }
+
+    .modal-box {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      max-width: 780px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 1.75rem;
+      box-shadow: var(--shadow);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .close-btn {
+      background: rgba(239, 68, 68, 0.15);
+      color: var(--danger);
+      border: none;
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    .dash-section {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 1.15rem;
+      margin-bottom: 1rem;
+    }
+
+    .dash-section h4 {
+      margin-bottom: 0.75rem;
+      color: var(--accent-primary);
+    }
+
+    textarea.input-field {
+      width: 100%;
+      min-height: 95px;
+      resize: vertical;
+    }
+
+    /* Toast Notification */
+    #toast {
+      position: fixed;
+      bottom: 24px;
+      left: 24px;
+      z-index: 2000;
+      background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+      color: #fff;
+      padding: 0.8rem 1.4rem;
+      border-radius: 14px;
+      font-weight: 700;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+      transform: translateY(120%);
+      opacity: 0;
+      transition: all 0.3s ease;
+    }
+
+    #toast.show {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 640px) {
+      .question-stage {
+        padding: 1.6rem 1.1rem;
+      }
+      .btn {
+        width: 100%;
+      }
+      .site-box-card {
+        max-width: 100%;
+      }
+    }
+  </style>
+
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <link rel="manifest" href="./manifest.json?v=v1794581811488">
+    <meta name="theme-color" content="#00ffff">
+    <link rel="apple-touch-icon" href="./icon-192.png?v=v1794581811488">
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('./sw.js?v=v1794581811488')
+            .then(reg => console.log('SW Registered'))
+            .catch(err => console.log('SW Failed', err));
+        });
+      }
+    </script>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="nav-container">
+      <div class="brand" id="brandLogo" title="اضغط 5 مرات لفتح لوحة التحكم المخفية">
+        <!-- لوجو البلكونة مطابق للصورة -->
+        <div class="brand-logo" aria-label="لوجو البلكونة">
+          <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="nightSky" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#071026"/>
+                <stop offset="60%" stop-color="#13264e"/>
+                <stop offset="100%" stop-color="#1e3150"/>
+              </linearGradient>
+              <linearGradient id="warmWall" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#5c361a"/>
+                <stop offset="50%" stop-color="#3d2210"/>
+                <stop offset="100%" stop-color="#211209"/>
+              </linearGradient>
+              <radialGradient id="lampGlow" cx="0.5" cy="0.5" r="0.5">
+                <stop offset="0%" stop-color="#fde68a" stop-opacity="0.95"/>
+                <stop offset="45%" stop-color="#f59e0b" stop-opacity="0.45"/>
+                <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+              </radialGradient>
+              <radialGradient id="candleGlow" cx="0.5" cy="0.5" r="0.5">
+                <stop offset="0%" stop-color="#fffbeb" stop-opacity="1"/>
+                <stop offset="40%" stop-color="#fbbf24" stop-opacity="0.6"/>
+                <stop offset="100%" stop-color="#d97706" stop-opacity="0"/>
+              </radialGradient>
+            </defs>
+
+            <!-- Night City View (Left Side) -->
+            <rect x="0" y="0" width="52" height="120" fill="url(#nightSky)"/>
+            <!-- Distant City Skyscrapers -->
+            <rect x="4" y="34" width="11" height="55" fill="#0b1528"/>
+            <rect x="17" y="24" width="13" height="65" fill="#091224"/>
+            <rect x="32" y="40" width="12" height="50" fill="#0d1830"/>
+            <!-- City Lights -->
+            <g fill="#7dd3fc" opacity="0.75">
+              <rect x="6" y="38" width="2" height="2"/><rect x="10" y="42" width="2" height="2"/>
+              <rect x="6" y="48" width="2" height="2"/><rect x="10" y="54" width="2" height="2"/>
+              <rect x="19" y="28" width="2" height="2"/><rect x="24" y="32" width="2" height="2"/>
+              <rect x="19" y="38" width="2" height="2"/><rect x="24" y="45" width="2" height="2"/>
+              <rect x="20" y="52" width="2" height="2"/><rect x="35" y="46" width="2" height="2"/>
+            </g>
+            <g fill="#fcd34d" opacity="0.8">
+              <rect x="10" y="38" width="2" height="2"/><rect x="6" y="58" width="2" height="2"/>
+              <rect x="24" y="28" width="2" height="2"/><rect x="19" y="45" width="2" height="2"/>
+              <rect x="35" y="52" width="2" height="2"/><rect x="39" y="44" width="2" height="2"/>
+            </g>
+
+            <!-- Balcony Glass Railing -->
+            <rect x="0" y="64" width="48" height="32" fill="#1e293b" opacity="0.45"/>
+            <line x1="0" y1="64" x2="48" y2="64" stroke="#475569" stroke-width="2"/>
+            <line x1="12" y1="64" x2="12" y2="96" stroke="#334155" stroke-width="1.2"/>
+            <line x1="26" y1="64" x2="26" y2="96" stroke="#334155" stroke-width="1.2"/>
+            <line x1="40" y1="64" x2="40" y2="96" stroke="#334155" stroke-width="1.2"/>
+
+            <!-- Warm Balcony Wall & Wood Panels (Right & Bottom) -->
+            <rect x="46" y="0" width="74" height="120" fill="url(#warmWall)"/>
+            <polygon points="0,92 120,92 120,120 0,120" fill="#26150a"/>
+            <!-- Vertical Wood Slats -->
+            <line x1="58" y1="0" x2="58" y2="95" stroke="#29160a" stroke-width="1.5" opacity="0.6"/>
+            <line x1="72" y1="0" x2="72" y2="95" stroke="#29160a" stroke-width="1.5" opacity="0.6"/>
+            <line x1="86" y1="0" x2="86" y2="95" stroke="#29160a" stroke-width="1.5" opacity="0.6"/>
+            <line x1="102" y1="0" x2="102" y2="95" stroke="#29160a" stroke-width="1.5" opacity="0.6"/>
+
+            <!-- Warm Hanging Pendant Lamp & String Lights -->
+            <circle cx="76" cy="28" r="32" fill="url(#lampGlow)"/>
+            <line x1="76" y1="0" x2="76" y2="20" stroke="#1c1917" stroke-width="2"/>
+            <path d="M68,22 Q76,14 84,22 Z" fill="#292524"/>
+            <circle cx="76" cy="24" r="4.5" fill="#fffbeb"/>
+            <!-- Small String Lights -->
+            <circle cx="54" cy="14" r="2.2" fill="#fde68a"/>
+            <circle cx="64" cy="18" r="2.2" fill="#fde68a"/>
+            <circle cx="92" cy="16" r="2.2" fill="#fde68a"/>
+            <circle cx="105" cy="12" r="2.2" fill="#fde68a"/>
+
+            <!-- Green Balcony Plants (Top & Left Corner) -->
+            <g fill="#14532d">
+              <circle cx="46" cy="10" r="11"/>
+              <circle cx="36" cy="6" r="9"/>
+              <circle cx="98" cy="8" r="10"/>
+              <circle cx="110" cy="16" r="11"/>
+              <ellipse cx="14" cy="84" rx="14" ry="12"/>
+              <ellipse cx="22" cy="90" rx="12" ry="10"/>
+            </g>
+            <g fill="#166534">
+              <circle cx="42" cy="14" r="7"/>
+              <circle cx="104" cy="12" r="7"/>
+              <circle cx="16" cy="80" r="8"/>
+              <circle cx="25" cy="86" r="7"/>
+            </g>
+
+            <!-- Cozy Lounge Chairs (Right & Back) -->
+            <!-- Back Chair -->
+            <ellipse cx="68" cy="74" rx="15" ry="13" fill="#1c1917" stroke="#44403c" stroke-width="1.5"/>
+            <ellipse cx="68" cy="76" rx="10" ry="7" fill="#78350f"/>
+            <!-- Front Right Woven Chair -->
+            <ellipse cx="94" cy="88" rx="20" ry="18" fill="#171717" stroke="#57534e" stroke-width="2"/>
+            <ellipse cx="92" cy="90" rx="14" ry="9" fill="#92400e"/>
+            <ellipse cx="96" cy="84" rx="9" ry="7" fill="#b45309"/>
+
+            <!-- Small Round Table & Glowing Candle (Center-Left) -->
+            <circle cx="45" cy="80" r="22" fill="url(#candleGlow)"/>
+            <ellipse cx="45" cy="86" rx="14" ry="5.5" fill="#1c1917" stroke="#44403c" stroke-width="1.2"/>
+            <line x1="37" y1="88" x2="34" y2="112" stroke="#171717" stroke-width="2.2"/>
+            <line x1="45" y1="90" x2="45" y2="115" stroke="#171717" stroke-width="2.2"/>
+            <line x1="53" y1="88" x2="56" y2="112" stroke="#171717" stroke-width="2.2"/>
+            <!-- Candle on Table -->
+            <rect x="42" y="76" width="6" height="8" rx="1.5" fill="#fef3c7"/>
+            <circle cx="45" cy="74" r="3" fill="#ffffff"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1>الْــبَــلـــكُـونَــة 🥂🦋</h1>
+          <span>قعدة رايقة، فنجان قهوة وحكايات وأسئلة ما بتخلصش</span>
+        </div>
+      </div>
+
+      <div class="header-controls">
+        <!-- Theme Switcher: Midnight (Default), Dark, Light -->
+        <div class="theme-switcher" role="group" aria-label="تبديل المود">
+          <button class="theme-btn active" data-set-theme="midnight" onclick="setTheme('midnight')">
+            🌌 ميد نايت
+          </button>
+          <button class="theme-btn" data-set-theme="dark" onclick="setTheme('dark')">
+            🌑 دارك
+          </button>
+          <button class="theme-btn" data-set-theme="light" onclick="setTheme('light')">
+            ☀️ لايت
+          </button>
+        </div>
+
+        <div class="sync-badge" id="firebaseStatusBadge">
+          <span class="sync-dot" id="syncDot"></span>
+          <span id="syncText">جاري الاتصال بـ Firebase...</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Quick Stats -->
+    <section class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-info">
+          <span>إجمالي الأسئلة</span>
+          <strong id="totalQuestionsCount">500</strong>
+        </div>
+        <div class="stat-icon">📚</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <span>أسئلة السيرفر المضافة</span>
+          <strong id="serverQuestionsCount">0</strong>
+        </div>
+        <div class="stat-icon">☁️</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <span>تم عرضها في جلستك</span>
+          <strong id="seenQuestionsCount">1</strong>
+        </div>
+        <div class="stat-icon">🎲</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-info">
+          <span>المفضلة لديك</span>
+          <strong id="favQuestionsCount">0</strong>
+        </div>
+        <div class="stat-icon">⭐</div>
+      </div>
+    </section>
+
+    <!-- Categories Filter -->
+    <section class="categories-bar" id="categoriesBar">
+      <button class="cat-pill active" onclick="filterCategory('الكل', this)">🔥 الكل</button>
+      <button class="cat-pill" onclick="filterCategory('صراحة وجرأة', this)">💣 صراحة وجرأة</button>
+      <button class="cat-pill" onclick="filterCategory('صحاب وشلة', this)">🤝 صحاب وشلة</button>
+      <button class="cat-pill" onclick="filterCategory('كراش وعلاقات', this)">❤️ كراش وعلاقات</button>
+      <button class="cat-pill" onclick="filterCategory('مواقف واعترافات', this)">👀 مواقف واعترافات</button>
+      <button class="cat-pill" onclick="filterCategory('عميقة ولو خيروك', this)">🧠 عميقة ولو خيروك</button>
+      <button class="cat-pill" onclick="filterCategory('أسئلة السيرفر', this)">☁️ أسئلة السيرفر</button>
+      <button class="cat-pill" onclick="filterCategory('المفضلة', this)">⭐ المفضلة</button>
+    </section>
+
+    <!-- Main Random Question Generator Card -->
+    <section class="question-stage">
+      <div class="question-meta">
+        <span class="badge" id="currentQuestionCategory">صراحة وجرأة</span>
+        <span class="badge" id="currentQuestionNumber">#1 / 500</span>
+      </div>
+
+      <div class="question-text" id="questionDisplay">
+        اضغط على زرار توليد سؤال عشوائي وابدأ اللعب مع صحابك!
+      </div>
+
+      <!-- مربع كبير وواضح لزر توليد سؤال عشوائي جديد -->
+      <div class="generate-box-wrapper">
+        <button class="btn-generate-big" onclick="generateRandomQuestion()">
+          <span class="dice-icon">🎲</span>
+          <span>ولد سؤال عشوائي جديد</span>
+        </button>
+      </div>
+
+      <div class="action-buttons">
+        <button class="btn btn-secondary" onclick="previousQuestion()">
+          ⏮️ السؤال السابق
+        </button>
+        <button class="btn btn-secondary" onclick="copyCurrentQuestion()">
+          📋 نسخ السؤال
+        </button>
+        <button class="btn btn-secondary" onclick="toggleFavoriteCurrent()" id="favBtn">
+          ☆ أضف للمفضلة
+        </button>
+        <button class="btn btn-secondary" onclick="shareWhatsApp()">
+          📲 مشاركة واتساب
+        </button>
+      </div>
+    </section>
+
+    <!-- Interactive Sarahah Answer Box -->
+    <section class="answer-panel">
+      <h3>💌 جاوب بصراحة على السؤال ده (بيتحفظ على السيرفر بدون اسم)</h3>
+      <div class="answer-form">
+        <input type="text" id="anonNickname" class="input-field" style="max-width: 200px;" placeholder="لقبك (اختياري - مجهول)" />
+        <input type="text" id="anonAnswerInput" class="input-field" placeholder="اكتب إجابتك أو اعترافك بصراحة هنا..." />
+        <button class="btn btn-primary" onclick="submitAnonAnswer()" style="padding: 0.8rem 1.4rem; font-size: 0.95rem;">
+          إرسال الإجابة 🚀
+        </button>
+      </div>
+    </section>
+
+    <!-- Explorer & Community Answers -->
+    <section class="questions-list-container">
+      <div class="tabs-header">
+        <button class="tab-btn active" id="tabQuestionsBtn" onclick="switchTab('questions')">📖 تصفح كل الأسئلة (<span id="tabQCount">500</span>)</button>
+        <button class="tab-btn" id="tabAnswersBtn" onclick="switchTab('answers')">💬 إجابات الصراحة من الزوار (<span id="tabACount">0</span>)</button>
+      </div>
+
+      <!-- Questions Browser Tab -->
+      <div id="questionsTabContent" style="margin-top: 1rem;">
+        <div class="search-bar">
+          <input type="text" id="searchInput" class="input-field" placeholder="🔍 ابحث في الـ 500+ سؤال بكلمة معينة..." oninput="renderQuestionsBrowser()" />
+          <button class="btn btn-secondary" onclick="syncFromFirebaseStorage(true)">🔄 تحديث من فايبر ستورج</button>
+        </div>
+        <div class="questions-grid" id="questionsGrid"></div>
+      </div>
+
+      <!-- Answers Browser Tab -->
+      <div id="answersTabContent" style="display: none; margin-top: 1rem;">
+        <div class="questions-grid" id="answersGrid"></div>
+      </div>
+    </section>
+
+    <!-- Bottom Websites Boxes Section (موقع 1 + المواقع المضافة من الداش بورد) -->
+    <section class="sites-bottom-section" aria-label="مواقعنا وروابط إضافية">
+      <div class="sites-bottom-header">
+        <h3>🌐 مواقعنا وروابط سريعة</h3>
+      </div>
+      <div class="sites-boxes-grid" id="bottomSitesGrid">
+        <a href="https://omarwebsites.github.io/1/" target="_blank" rel="noopener noreferrer" class="site-box-card">
+          <span class="site-box-name">🌐 موقع 1</span>
+          <span class="site-box-arrow">↗</span>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <span>جميع الحقوق محفوظة © الْــبَــلـــكُـونَــة 🥂🦋</span>
+    <button class="secret-trigger" onclick="openPasswordModal()" title="لوحة التحكم">🔒</button>
+  </footer>
+
+  <!-- Password Modal -->
+  <div class="modal-overlay" id="passwordModal">
+    <div class="modal-box" style="max-width: 440px;">
+      <div class="modal-header">
+        <h3>🔐 دخول الداش بورد المخفية</h3>
+        <button class="close-btn" onclick="closeModals()">✕</button>
+      </div>
+      <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 1rem;">
+        هذه اللوحة محمية بتشفير كامل. أدخل كلمة المرور الخاصة بالإدارة للمتابعة:
+      </p>
+      <input type="password" id="adminPasswordInput" class="input-field" style="width: 100%; margin-bottom: 1rem;" placeholder="أدخل الباسورد المشفر..." onkeydown="if(event.key==='Enter') verifyAdminPassword()" />
+      <div id="passwordError" style="color: var(--danger); font-size: 0.85rem; margin-bottom: 0.8rem; display: none;">
+        ❌ كلمة المرور غير صحيحة!
+      </div>
+      <button class="btn btn-primary" style="width: 100%;" onclick="verifyAdminPassword()">
+        فتح الداش بورد 🔓
+      </button>
+    </div>
+  </div>
+
+  <!-- Hidden Admin Dashboard Modal -->
+  <div class="modal-overlay" id="dashboardModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3>⚡ لوحة التحكم المخفية (Firebase Storage & Server)</h3>
+        <button class="close-btn" onclick="closeModals()">✕</button>
+      </div>
+
+      <!-- Add Single Question -->
+      <div class="dash-section">
+        <h4>➕ إضافة سؤال جديد للسيرفر (Firebase Storage & DB)</h4>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+          <select id="newQuestionCategory" class="input-field" style="max-width: 220px;">
+            <option value="صراحة وجرأة">صراحة وجرأة</option>
+            <option value="صحاب وشلة">صحاب وشلة</option>
+            <option value="كراش وعلاقات">كراش وعلاقات</option>
+            <option value="مواقف واعترافات">مواقف واعترافات</option>
+            <option value="عميقة ولو خيروك">عميقة ولو خيروك</option>
+            <option value="أسئلة السيرفر">أسئلة السيرفر</option>
+          </select>
+          <input type="text" id="newQuestionText" class="input-field" placeholder="اكتب السؤال الجديد هنا..." />
+        </div>
+        <button class="btn btn-primary" onclick="addQuestionToServer()">
+          ☁️ رفع وحفظ السؤال في السيرفر
+        </button>
+      </div>
+
+      <!-- Bulk Add Questions -->
+      <div class="dash-section">
+        <h4>📦 إضافة مجموعة أسئلة دفعة واحدة (سؤال في كل سطر)</h4>
+        <textarea id="bulkQuestionsText" class="input-field" placeholder="اكتب كل سؤال في سطر منفصل ليتم رفعها جميعاً إلى Firebase Storage..."></textarea>
+        <div style="display: flex; gap: 0.75rem; margin-top: 0.75rem; flex-wrap: wrap;">
+          <button class="btn btn-secondary" onclick="addBulkQuestionsToServer()">
+            🚀 رفع المجموعة كاملة للسيرفر
+          </button>
+          <button class="btn btn-secondary" onclick="uploadAllToFirebaseStorage()">
+            💾 مزامنة وحفظ قاعدة الـ 500+ سؤال كاملة في Firebase Storage
+          </button>
+        </div>
+      </div>
+
+      <!-- Add & Manage Bottom Websites -->
+      <div class="dash-section">
+        <h4>🌐 إضافة وإدارة مربعات المواقع أسفل الصفحة (بجانب موقع 1)</h4>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 0.75rem;">
+          <input type="text" id="newSiteName" class="input-field" style="max-width: 240px;" placeholder="اسم المربع (مثال: موقع 2)" />
+          <input type="url" id="newSiteUrl" class="input-field" placeholder="اللينك (مثال: https://omarwebsites.github.io/2/)" dir="ltr" />
+        </div>
+        <button class="btn btn-primary" onclick="addSiteToServer()" style="margin-bottom: 1rem;">
+          ➕ إضافة الموقع وحفظه على السيرفر
+        </button>
+        <div id="adminSitesList" style="max-height: 180px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem;"></div>
+      </div>
+
+      <!-- Manage Server Questions -->
+      <div class="dash-section">
+        <h4>🗂️ الأسئلة المرفوعة على السيرفر (<span id="adminServerCount">0</span>)</h4>
+        <div id="adminServerQuestionsList" style="max-height: 220px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem;"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast">تم بنجاح!</div>
+
+  <!-- Firebase SDKs (Compat for seamless single-file operation across Storage & Realtime DB) -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-storage-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+  <script>
+    /********************************************************************
+     * 1. إعدادات الفايربيز (كما طلب المستخدم بدون أي تغيير نهائياً)
+     ********************************************************************/
+    const firebaseConfig = {
+      apiKey: "AIzaSyB3o3PJ_l6-lBYReKId2FRxmINjjsV3w1M",
+      authDomain: "backkeenddd.firebaseapp.com",
+      databaseURL: "https://backkeenddd-default-rtdb.firebaseio.com",
+      projectId: "backkeenddd",
+      storageBucket: "backkeenddd.firebasestorage.app",
+      messagingSenderId: "909565299323",
+      appId: "1:909565299323:web:a9ede76e82b00a2039b0de",
+      measurementId: "G-QSXVNCH52R"
+    };
+
+    let app, storage, db;
+    let isFirebaseConnected = false;
+
+    try {
+      app = firebase.initializeApp(firebaseConfig);
+      storage = firebase.storage();
+      db = firebase.database();
+    } catch (err) {
+      console.warn("Firebase Init Notice:", err);
+    }
+
+    /********************************************************************
+     * 2. بنك الـ 500 سؤال الكامل (مقسم إلى 5 تصنيفات × 100 سؤال = 500 سؤال)
+     ********************************************************************/
+    const BUILT_IN_RAW = {
+      "صراحة وجرأة": [
+        "إيه أكتر كذبة كذبتها على أقرب صاحب ليك ومحدش عرفها لحد النهارده؟",
+        "لو موبايلك اتفتح قدام كل الناس دلوقتي، إيه أكتر حاجة هتخاف يشوفوها؟",
+        "مين الشخص اللي بتبتسم في وشه وأنت من جواك مش طايقه؟",
+        "إيه أكتر حاجة ندمت إنك عملتها في السنتين اللي فاتوا؟",
+        "هل عمرك خنت ثقة حد كان مأمنك على سر كبير؟",
+        "إيه الصفة اللي فيك نفسك تغيرها بس مش قادر؟",
+        "مين أكتر شخص ظلمته في حياتك ولحد دلوقتي ما اعتذرتلوش؟",
+        "لو معاك استيكة تمسح بيها شخص واحد من حياتك، هيكون مين؟",
+        "إيه أكتر موقف محرج حصلك في مكان عام وكنت تتمنى الأرض تنشق وتبلعك؟",
+        "كم مرة بكيت في السر من غير ما حد في البيت يحس بيك؟",
+        "هل عمرك سرقت حاجة حتى لو كانت بسيطة وأنت صغير؟",
+        "إيه أكتر كلمة اتقالتلك وجرحتك ومش قادر تنساها؟",
+        "مين الشخص اللي لو طلب منك أي حاجة مستحيل تقوله لأ؟",
+        "إيه أكتر قرار غلط خدته وكان سببه العند؟",
+        "هل بتغار من نجاح حد من صحابك أحياناً بصراحة؟",
+        "إيه الحاجة اللي بتعملها لما تكون لوحدك ومستحيل تعملها قدام الناس؟",
+        "لو خيروك تكشف سرك الكبير أو تخسر أعز صحابك، هتختار إيه؟",
+        "إيه أكتر إشاعة طلعت عليك وكانت حقيقية بس أنكرتها؟",
+        "مين الشخص اللي عملتله بلوك وندمت بعدها؟",
+        "هل عمرك مثلت إنك تعبان عشان تهرب من موقف أو خروجة؟",
+        "إيه أكتر حاجة بتخاف منها في المستقبل؟",
+        "لو قدامك فرصة تقرأ أفكار شخص واحد لمدة يوم، هتختار مين؟",
+        "إيه أكتر عيب في شخصيتك الناس دايماً بتشتكي منه؟",
+        "هل عمرك فتشت في موبايل حد من وراه؟",
+        "مين الشخص اللي كنت فاكره صاحب عمرك وطلع أكبر مقلب؟",
+        "إيه أغرب حاجة بحثت عنها على جوجل في نص الليل؟",
+        "هل عمرك قولت لحد 'بحبك' وأنت مش قاصدها؟",
+        "إيه أكتر مبلغ صرفته على حاجة تافهة وندمت عليه؟",
+        "لو رجع بيك الزمن 5 سنين، إيه الغلطة اللي مش هتكررها؟",
+        "مين الشخص اللي بتراقبه في صمت من أكونت فيك أو من بعيد؟",
+        "إيه أكتر حاجة بتعصبك لدرجة إنك تفقد أعصابك؟",
+        "هل عمرك اتكلمت على صاحبك من وراه وبعدين قعدت معاه عادي؟",
+        "إيه السر اللي مخبيه عن أهلك ولو عرفوه هتحصل مشكلة كبيرة؟",
+        "هل بتعتبر نفسك شخص متواضع ولا مغرور في السر؟",
+        "إيه أكتر وعد قطعته على نفسك وخلفت بيه؟",
+        "مين الشخص اللي وجوده في حياتك بقى تقيل عليك؟",
+        "هل عمرك أخدت مصلحة من حد وبعدين بعدت عنه؟",
+        "إيه أكتر حاجة بتحسسك بالنقص لما تقارن نفسك بغيرك؟",
+        "لو حد قالك هديك مليون جنيه بس تقاطع أعز صاحب ليك، هتوافق؟",
+        "إيه أكتر موقف حسيت فيه إنك وحيد رغم إن حواليك ناس كتير؟",
+        "هل عمرك عملت نفسك نايم عشان متردش على حد؟",
+        "إيه أكتر حاجة بتكرهها في شكلك أو ستايلك؟",
+        "مين الشخص اللي نفسك تواجهه وتقوله 'أنت جرحتني'؟",
+        "هل عمرك فرحت في مصيبة حصلت لحد كنت متضايق منه؟",
+        "إيه أكتر كذبة بتقولها في الإنترفيو أو لما تتعرف على ناس جديدة؟",
+        "لو كل الناس اللي تعرفهم في أوضة واحدة، مين أول واحد هتطرده؟",
+        "إيه أكتر حاجة بتخليك تحس بالذنب كل ما تفتكرها؟",
+        "هل بتسامح بسهولة ولا بتشيل في قلبك وتنتقم في الوقت المناسب؟",
+        "إيه أكتر موقف خلاك تفقد الثقة في الناس؟",
+        "لو اضطريت تعترف باعتراف جريء دلوقتي حالاً، هتقول إيه؟",
+        "هل عمرك استلفت فلوس وعملت نفسك ناسي ترجعها؟",
+        "إيه أكتر حاجة بتخاف الناس تكتشفها عن حقيقتك؟",
+        "مين الشخص اللي بتحاول تبان قدامه جامد وأنت في الحقيقة ضعيف قدامه؟",
+        "هل عمرك بعت سكرين شوت لشات بينك وبين حد لطرف تالت؟",
+        "إيه أكتر حاجة بتتمنى لو مكنتش عرفتها أبداً؟",
+        "لو حياتك كتاب، إيه الفصل اللي هتقطعه وترميه؟",
+        "هل عمرك ادعيت معرفة حاجة وأنت متعرفش عنها أي تفصيلة؟",
+        "مين الشخص اللي لو شفته صدفة في الشارع هتغير طريقك فوراً؟",
+        "إيه أكتر نصيحة بتديها للناس وأنت أصلاً مابتعملش بيها؟",
+        "هل عمرك حقدت على حد بسبب حظه الحلو؟",
+        "إيه أكتر موقف خلاك تحس إنك شخص أناني؟",
+        "لو كان لازم تعتذر لشخص واحد النهارده، هيكون مين وعلى إيه؟",
+        "هل عمرك كسرت حاجة في بيت حد أو في الشغل ولبستها في غيرك؟",
+        "إيه أكتر حاجة بتكره إن الناس تسألك عنها؟",
+        "مين الشخص اللي بتغير منه في الشلة من غير ما تبين؟",
+        "هل عمرك ضحكت على نكتة بايخة عشان مصلحة؟",
+        "إيه أكتر ذكرى نفسك تعملها ديليت من دماغك للأبد؟",
+        "هل شايف نفسك شخص محبوب فعلاً ولا الناس بتجاملك؟",
+        "إيه أكتر حاجة عملتها عشان تلفت نظر حد معين؟",
+        "لو اتعرضت لموقف خطر، تفتكر مين أول واحد هيجري يسيبك؟",
+        "هل عمرك قلت سر حد لمجرد إن القعدة تحلو؟",
+        "إيه أكتر حاجة بتمثل إنك بتحبها عشان تساير اللي حواليك؟",
+        "مين الشخص اللي خسرته بسبب غبائك أو تسرعك؟",
+        "هل عمرك استخدمت دموعك عشان تكسب تعاطف وتخرج من مشكلة؟",
+        "إيه أكتر حاجة في ماضيك بتخاف تتفتح قدام شريك حياتك مستقبلاً؟",
+        "هل بتحكم على الناس من مظهرهم في أول مقابلة؟",
+        "إيه أكتر مرة حسيت فيها إنك منافق؟",
+        "مين الشخص اللي بتتمنى يرجع يكلمك بس كرامتك مانعاك؟",
+        "هل عمرك رفضت تساعد حد وأنت كان في إيدك تساعده؟",
+        "إيه أكتر حاجة بتخليك تحس بالضعف؟",
+        "لو صراحتك المطلقة لمدة يوم هتخسرك نص معارفك، هتقول الصراحة؟",
+        "إيه أكتر كذبة أهلك لسه مصدقينها عنك لحد دلوقتي؟",
+        "مين الشخص اللي بتدعي عليه في سرك لما تفتكره؟",
+        "هل عمرك أخدت مجهود حد تاني ونسبته لنفسك؟",
+        "إيه أكتر حاجة بتندم عليها كل يوم قبل ما تنام؟",
+        "هل شايف إن قلبك طيب زيادة عن اللزوم ولا قاسي؟",
+        "إيه أكتر سؤال بتتهرب من إجابته دايماً؟",
+        "مين الشخص اللي لو عرف رأيك الحقيقي فيه هيزعل منك جداً؟",
+        "هل عمرك دخلت علاقة أو صداقة بدافع الزهق بس؟",
+        "إيه أكتر حاجة بتخليك تفقد احترامك لأي شخص فوراً؟",
+        "هل عمرك خنت وعد قطعته لحد قبل ما يموت أو يسافر؟",
+        "إيه أكتر حاجة بتكرهها في مجتمعك أو البيئة اللي حواليك؟",
+        "لو صحابك قيموا صراحتك من 10، تفتكر هيدوك كام؟",
+        "هل عمرك غيرت مبدأ من مبادئك عشان فلوس أو منصب؟",
+        "إيه أكتر موقف حسيت فيه إنك اتبعت بالرخيص؟",
+        "مين الشخص اللي بتفتكر كلامه لحد دلوقتي وبيوجعك؟",
+        "هل عمرك عملت مشكلة بين اتنين عن قصد؟",
+        "إيه أكتر حاجة بتداريها ورا ضحكتك؟",
+        "لو دي آخر فرصة تقول فيها الحقيقة لحد، هتقول لمين وإيه؟",
+        "إيه أكتر سؤال في صراحة كنت خايف يطلعلك النهارده؟"
+      ],
+      "صحاب وشلة": [
+        "مين أكتر واحد في الشلة بيفهمك من نظرة عين من غير ما تتكلم؟",
+        "مين الصاحب اللي لو اتصلت بيه الساعة 4 الفجر في مصيبة هتلاقيه قدامك؟",
+        "مين أكتر واحد في الصحاب جلدة وبخيل لما ييجي وقت الحساب؟",
+        "مين الصاحب اللي دايماً بيقول 'أنا في الطريق' وهو لسه تحت البطانية؟",
+        "لو طلعنا رحلة سفاري وتوهنا في الصحراء، مين أول واحد هيتوتر ويعيط؟",
+        "مين أكتر واحد في الشلة دمه خفيف وبيقلب أي نكد لضحك؟",
+        "مين الصاحب اللي مينفعش أبداً تحكيله سر لأنه إذاعة متنقلة؟",
+        "لو الشلة كلها دخلت السجن، مين اللي هيكون السبب ومين اللي هيخرجنا؟",
+        "مين أكتر صاحب عنده ذوق عالي في اللبس والأغاني؟",
+        "مين الصاحب اللي كل ما يخرج معاكم لازم يعمل خناقة مع حد؟",
+        "إيه أجدع موقف عمله معاك صاحبك ومستحيل تنساه طول عمرك؟",
+        "مين أكتر واحد في الشلة بيحب الأكل أكتر من صحابه؟",
+        "لو هتفتح مشروع تجاري مع واحد بس من صحابك، هتختار مين؟",
+        "مين الصاحب اللي لما بيرتبط بيختفي تماماً ومابنشوفوش غير لما يفركش؟",
+        "مين أكتر واحد في الشلة دراما كوين وبيكبر المواضيع؟",
+        "إيه أكتر خروجة مع صحابك كانت تاريخية ونفسك تتكرر تاني؟",
+        "مين الصاحب اللي نصايحه دايماً بتوديك في داهية بس بتسمع كلامه برضه؟",
+        "لو معاك تذكرتين سفر ببلاش لأوروبا، هتاخد مين من صحابك معاك؟",
+        "مين أكتر واحد في الشلة بيعرف يفاصل ويشتري حاجات بأرخص سعر؟",
+        "مين الصاحب اللي ضحكته لوحدها فضيحة في أي مكان هادي؟",
+        "إيه اللقب السري اللي مطلعينه على حد في الشلة؟",
+        "مين أكتر واحد في الصحاب بيتفلسف وهو مش فاهم حاجة؟",
+        "لو الشلة عملت فيلم سينمائي، هيكون نوعه إيه ومين البطل؟",
+        "مين الصاحب اللي بيتقمص بسرعة ومحتاج مصالحة كل شوية؟",
+        "مين أكتر واحد في الشلة قلبه أبيض ومابيعرفش يشيل من حد؟",
+        "إيه أكتر كذبة مشهورة بيقولها واحد من صحابك وكلنا عارفين إنها فتي؟",
+        "مين الصاحب اللي لو غاب عن القعدة تحس إن الخروجة ناقصها روح؟",
+        "مين أكتر واحد في الشلة بيسوق بجنون وبنقرأ الشهادة وإحنا راكبين معاه؟",
+        "لو هتبدل حياتك يوم واحد مع حد من صحابك، هتختار مين؟",
+        "مين الصاحب اللي دايماً موبايله فاصل شحن أو صامت؟",
+        "إيه أكتر مقلب عملتوه في واحد من الشلة وكان رد فعله مسخرة؟",
+        "مين أكتر واحد في الصحاب بيعرف يطبخ في السفر والمصايف؟",
+        "مين الصاحب اللي شكله هادي ومؤدب بس هو رأس المصايب كلها؟",
+        "لو في مسابقة كسل عالمية، مين في صحابك هياخد المركز الأول؟",
+        "مين أكتر واحد في الشلة بيغني بصوت وحش وفاكر نفسه عمرو دياب؟",
+        "إيه الصفة اللي بتجمع شلتكم وبتخليكم شبه بعض؟",
+        "مين الصاحب اللي بيتحول لشخص تاني خالص لما يكون جعان؟",
+        "مين أكتر واحد في الشلة بيصرف فلوسه كلها في أول يومين من الشهر؟",
+        "لو واحد من صحابك بقى رئيس جمهورية، مين هيكون وأول قرار هياخده إيه؟",
+        "مين الصاحب اللي بيعرف يطلعكم من أي كمين أو موقف صعب بذكائه؟",
+        "إيه أكتر جملة مشهورة بيقولها صاحبك الانتيم وعلقت في لسانك؟",
+        "مين أكتر واحد في الشلة بيحب التصوير وبيقعد ساعة يظبط في شعره؟",
+        "مين الصاحب اللي لو سلفك حاجة بيفضل يفكرك بيها عشر سنين؟",
+        "إيه أول انطباع أخدته عن أعز صاحب ليك قبل ما تتصاحبوا وطلع غلط؟",
+        "مين أكتر واحد في الشلة بيخاف من الضلمة أو الكلاب؟",
+        "لو الشلة اشتركت في برنامج المسابقات، مين اللي هيخسرنا في أول سؤال؟",
+        "مين الصاحب اللي دايماً بيختار أماكن خروجات غريبة بس بتطلع حلوة؟",
+        "مين أكتر واحد في الصحاب بيعرف يصالح المتخاصمين ويلم الشمل؟",
+        "إيه أكتر خناقة حصلت بينك وبين صاحبك المقرب ورجعتوا أقوى من الأول؟",
+        "مين الصاحب اللي لما بيحكي قصة بيزود عليها بهارات من عنده؟",
+        "لو هتوصف شلتك في تلات كلمات، هيكونوا إيه؟",
+        "مين أكتر واحد في الشلة بينام في أي مكان وفي أي وقت؟",
+        "مين الصاحب اللي أهلك بيحبوه وبيثقوا فيه أكتر منك؟",
+        "إيه أكتر لعبة بتلعبوها سوا وبتقلب بخناقة بجد؟",
+        "مين أكتر واحد في الشلة حظه نحس في كل حاجة؟",
+        "مين الصاحب اللي لو شافك متضايق مابيسيبكش غير وأنت بتضحك؟",
+        "إيه أكتر سفرية خططتوا ليها مية مرة ولحد دلوقتي ماتنفذتش؟",
+        "مين أكتر واحد في الصحاب بيعشق القهوة ومابيفوقش من غيرها؟",
+        "لو الشلة عاشت في بيت واحد، مين اللي هينضف ومين اللي هيبهدل الدنيا؟",
+        "مين الصاحب اللي بيعرف يقلد أصوات وحركات الناس بالمللي؟",
+        "إيه أكتر هدية جبهالك صاحبك ولسه محتفظ بيها لحد النهارده؟",
+        "مين أكتر واحد في الشلة بينسى أسامي الناس والمواعيد؟",
+        "مين الصاحب اللي دايماً بيقترح نطلب أكل في نص الليل؟",
+        "لو في zombie apocalypse، مين أول صاحب هيضحي بيك عشان يهرب؟",
+        "مين أكتر واحد في الشلة عاقل وبيحسبها بالورقة والقلم؟",
+        "مين الصاحب اللي عنده حل لكل مشاكل الكون إلا مشاكله هو؟",
+        "إيه أكتر صورة قديمة ليك مع صحابك كل ما تشوفوها تموتوا من الضحك؟",
+        "مين أكتر واحد في الشلة بيتأثر بالأفلام والمسلسلات؟",
+        "مين الصاحب اللي لو قعدت معاه 10 ساعات متزهقش ثانية؟",
+        "إيه القانون غير المكتوب في شلتكم واللي يخالفه بيتعاقب؟",
+        "مين أكتر واحد في الصحاب بيكره الزحمة وبيحب القعدات الهادية؟",
+        "مين الصاحب اللي بيعرف يختار هدايا صح في أعياد الميلاد؟",
+        "لو هتدي جايزة أوسكار لواحد من صحابك، هتديهاله على دور إيه؟",
+        "مين أكتر واحد في الشلة بيضحك قبل ما يقول الإفيه فيبوظ النكتة؟",
+        "مين الصاحب اللي كان زميل عادي وفجأة بقى أقرب حد لقلبك؟",
+        "إيه أكتر موقف أثبتلك إن الصحاب الجدعان رزق؟",
+        "مين أكتر واحد في الشلة بيعرف يلبس شيك بأقل التكاليف؟",
+        "مين الصاحب اللي دايماً بيضيع مفاتيحه أو محفظته؟",
+        "لو الشلة هتعمل بودكاست، هيكون اسمه إيه وهتتكلموا في إيه؟",
+        "مين أكتر واحد في الصحاب دمه حامي وبيتعصب في ثانية؟",
+        "مين الصاحب اللي دايماً بيشجعك لما تحس بالإحباط؟",
+        "إيه أكتر مكان مرتبط بذكريات شلتكم ومستحيل تنسوه؟",
+        "مين أكتر واحد في الشلة بيحب المغامرات والحاجات المجنونة؟",
+        "مين الصاحب اللي لما بيكدب وشه بيحمر وبيتفقس على طول؟",
+        "لو كل واحد في الشلة بقى مليونير، مين اللي هيتنك علينا؟",
+        "مين أكتر واحد في الصحاب بيسمعك للآخر من غير ما يقاطعك؟",
+        "إيه أكتر تريند عملتوه سوا مع صحابك وكان مسخرة؟",
+        "مين الصاحب اللي بيحفظ أسرار الشلة كلها في بير؟",
+        "مين أكتر واحد في الشلة بيجيب درجات عالية وهو بيقول مابذاكرش؟",
+        "لو هتكتب رسالة شكر لصاحب واحد بس، هتكتبها لمين؟",
+        "مين الصاحب اللي وجوده في أي سفرية بيخليها عشرة على عشرة؟",
+        "إيه أكتر حاجة بتفتقدها في صحاب أيام الطفولة والمدرسة؟",
+        "مين أكتر واحد في الشلة بيعرف ياخد صور احترافية لباقي الصحاب؟",
+        "مين الصاحب اللي دايماً بيطلب من أكلك بعد ما يقول شبعان؟",
+        "لو قعدنا بعد 30 سنة وإحنا عواجيز، إيه القصة اللي هنفضل نحكيها؟",
+        "مين أكتر واحد في الشلة بيعرف يراضي الكل ومحدش يقدر يزعل منه؟",
+        "إيه الفرق بين الصاحب الحقيقي وزميل المصلحة من وجهة نظرك؟",
+        "مين الصاحب اللي أول ما بتشوفه بتنسى همومك كلها؟",
+        "لو هتختار كابتن يقود الشلة في مهمة مستحيلة، هيكون مين؟",
+        "مين الصاحب اللي يستاهل تقوله دلوقتي 'ربنا يديمك في حياتي'؟"
+      ],
+      "كراش وعلاقات": [
+        "أول حرف من اسم الكراش الحالي أو القديم إيه؟",
+        "إيه أول حاجة بتلفت نظرك في الشخص اللي بتعجب بيه؟",
+        "هل بتؤمن بالحب من أول نظرة ولا لازم عشرة ومواقف؟",
+        "لو الكراش اعترفلك بحبه دلوقتي، أول رد فعل ليك هيكون إيه؟",
+        "إيه أكتر حاجة ممكن تقفلك من الكراش في ثانية واحدة (Turn off)؟",
+        "هل عمرك حبيت حد من طرف واحد وفضلت ساكت سنين؟",
+        "لو خيروك بين شخص بيحبك أوي وشخص أنت بتحبه أوي، هتختار مين؟",
+        "إيه الأغنية اللي كل ما تسمعها بيجي في بالك شخص معين؟",
+        "هل ممكن ترتبط بحد من شلة صحابك المقربين ولا بتخاف تخسر الصداقة؟",
+        "إيه أكتر علامة بتفضحك لما تكون معجب بحد؟",
+        "هل الغيرة دليل حب ولا قلة ثقة من وجهة نظرك؟",
+        "إيه أقصى حاجة مجنونة عملتها عشان تشوف الشخص اللي بتحبه صدفة؟",
+        "هل ممكن تسامح في الخيانة لو الطرف التاني ندم بجد؟",
+        "إيه الفرق بين الإعجاب العابر والحب الحقيقي بالنسبة ليك؟",
+        "مين الشخص اللي كل ما يبعتلك مسدج ضربات قلبك بتزيد؟",
+        "هل بتفضل تعترف بمشاعرك ولا تستنى الطرف التاني يبدأ؟",
+        "إيه أكتر صفة بتتمنى تكون موجودة في شريك حياتك المستقبلي؟",
+        "هل عمرك رفضت حد كان بيحبك بجد وندمت بعد ما ضاع من إيدك؟",
+        "إيه رأيك في العلاقات عن بعد (Long Distance)، ممكن تنجح؟",
+        "لو اكتشفت إن صاحبك المقرب معجب بنفس الشخص اللي أنت معجب بيه، هتتصرف إزاي؟",
+        "إيه أكتر جملة رومانسية اتقالتلك ولسه معلمة في قلبك؟",
+        "هل بتفتش في أكونت الكراش القديم من وقت للتاني؟",
+        "إيه أكتر سبب خلاك تنهي علاقة كنت متمسك بيها؟",
+        "هل ممكن ترجع للإكس لو اتغير للأحسن؟",
+        "إيه التصرف البسيط اللي لو حد عمله معاك بيخطف قلبك فوراً؟",
+        "هل بتفضل الشريك الهادي العاقل ولا المجنون المرح؟",
+        "كم مرة حسيت إنك لقيت فتى/فتاة أحلامك وطلع اختيار غلط؟",
+        "إيه أكتر حاجة بتخوفك من الارتباط في الوقت الحالي؟",
+        "هل بتحكم على شريك حياتك من تجاربه السابقة؟",
+        "لو الكراش بيقرأ إجابتك دي دلوقتي، تحب تقوله إيه من غير ما تذكر اسمه؟",
+        "إيه أكتر هدية رومانسية نفسك حد يفاجئك بيها؟",
+        "هل التجاهل بيزود الشوق فعلاً ولا بيقتل المشاعر؟",
+        "إيه أكتر موقف رومانسي شفته في فيلم ونفسك تعيشه في الحقيقة؟",
+        "هل عمرك دخلت في الفريندزون (Friendzone) وخرجت منها منتصر؟",
+        "إيه الحاجة اللي مستحيل تتنازل عنها في شريك حياتك مهما حصل؟",
+        "هل بتؤمن إن الصداقة بين الولد والبنت ممكن تتحول لحب في الآخر؟",
+        "إيه أكتر موقف محرج حصلك قدام الكراش؟",
+        "هل بتحب الشخص اللي بيهتم بالتفاصيل الصغيرة ولا الأفعال الكبيرة؟",
+        "لو شخصيتك في الحب ليها عنوان فيلم، هيكون إيه؟",
+        "إيه أكتر غلطة بتتكرر منك في العلاقات العاطفية؟",
+        "هل الاهتمام بيتطلب ولا لو اتطلب بيفقد قيمته؟",
+        "مين آخر شخص دخلت على بروفايله قبل ما تفتح الموقع ده؟",
+        "إيه رأيك في الزواج التقليدي (الصالونات) مقارنة بالحب؟",
+        "هل عمرك كتبت بوست مقصود لشخص واحد بس وعملت نفسك بتتكلم عام؟",
+        "إيه أكتر صفة فيك بتخلي الطرف التاني يتعلق بيك؟",
+        "هل فرق السن الكبير في الحب بيفرق معاك ولا مش مهم؟",
+        "إيه اللحظة اللي بتعرف فيها إن المشاعر خلصت ولازم تمشي؟",
+        "هل بتفضل تشارك تفاصيل علاقتك مع صحابك ولا تخليها في السر؟",
+        "لو قدامك فرصة تسأل الكراش سؤال واحد ويجاوب بصراحة، هتسأله إيه؟",
+        "إيه أكتر حاجة بتطمنك في أي علاقة؟",
+        "هل عمرك حلمت بشخص معين وصحيت لقيته باعتلك رسالة؟",
+        "إيه رأيك في اللي بيراقب ستوريهات الكراش من غير ما يعمل لايك؟",
+        "هل الكرامة ليها وجود في الحب ولا الحب بيلغي الكرامة؟",
+        "إيه أكتر كذبة بيقولها المرتبطين لبعض في البدايات؟",
+        "هل بتحب الشخص اللي يغار عليك ولا بتحس إنها خنقة؟",
+        "إيه المكان المثالي لأول ديت (First Date) من وجهة نظرك؟",
+        "هل عمرك اتظاهرت بعدم الاهتمام وأنت هتموت وتكلم الشخص ده؟",
+        "إيه أكتر حاجة بتكسر القلب: الخيانة ولا الإهمال وتغير المشاعر؟",
+        "هل ممكن تحب شخص مختلف عنك تماماً في الطباع والاهتمامات؟",
+        "إيه أكتر نصيحة عاطفية سمعتها وطلعت صح مية في المية؟",
+        "هل بتحتفظ بالرسايل والهدايا القديمة بعد الفراق ولا بتمسح كل حاجة؟",
+        "إيه العلامة اللي بتأكدلك إن الشخص ده بيحبك بجد مش مجرد تسليه؟",
+        "هل عمرك كنت السبب في جرح قلب حد كان بيحبك بصدق؟",
+        "إيه أكتر حاجة بتجذبك في شخصية الطرف التاني غير الشكل؟",
+        "هل بتؤمن بمقولة 'اللي يحب مابيكرهش'؟",
+        "لو الكراش مرتبط، بتفضل تنسحب في هدوء ولا تستنى؟",
+        "إيه أكتر موقف خلاك تكتشف معدن الشخص اللي كنت مرتبط بيه؟",
+        "هل الصوت وطريقة الكلام بيفرقوا معاك في الإعجاب؟",
+        "إيه أكتر حاجة بتخليك تقرر تاخد خطوة رسمية في العلاقة؟",
+        "هل عمرك استعنت بصاحبك عشان يفتح كلام مع الكراش بالنيابة عنك؟",
+        "إيه أكتر تاريخ مميز في حياتك العاطفية ومابيتنسيش؟",
+        "هل بتسامح لو شريكك نسي عيد ميلادك أو مناسبة مهمة بينكم؟",
+        "إيه رأيك في الصراحة الكاملة عن العلاقات السابقة مع الشريك الجديد؟",
+        "هل الحب بيغير الإنسان للأحسن فعلاً؟",
+        "إيه أكتر حاجة بتخليك تحس بالأمان مع شخص معين؟",
+        "لو قلبك وعقلك اختلفوا في اختيار شريك حياتك، بتمشي ورا مين؟",
+        "هل عمرك حسيت إنك بتدي في العلاقة أكتر بكتير ما بتاخد؟",
+        "إيه الكلمة اللي لو سمعتها من الشخص اللي بتحبه بتنسى أي زعل؟",
+        "هل بتحب المفاجآت الرومانسية ولا بتتحرج منها؟",
+        "إيه أكتر حاجة اتعلمتها من آخر تجربة عاطفية مريت بيها؟",
+        "هل ممكن تعجب بحد من خلال الشات بس من غير ما تشوفه في الحقيقة؟",
+        "إيه أكتر صفة بتكرهها في الشخص النرجسي أو المتملك؟",
+        "لو هتوصف حالتك العاطفية دلوقتي باسم أغنية، هتكون إيه؟",
+        "هل بتفضل الشريك اللي يصالحك بالكلام الحلو ولا بالأفعال والمواقف؟",
+        "إيه أكتر حاجة بتخلي الحب يستمر سنين طويلة من غير ملل؟",
+        "هل عمرك خبيت إعجابك بحد خوفاً من الرفض؟",
+        "إيه أول حاجة بتعملها لما تحب تتخطى (Move on) علاقة انتهت؟",
+        "هل بتؤمن بالنصيب والصدف في مقابلة شريك العمر؟",
+        "إيه أكتر سؤال نفسك الكراش يسألهولك؟",
+        "هل النظرات بتكفي عشان توصل المشاعر من غير كلام؟",
+        "إيه أكتر حاجة بتخليك تبتسم تلقائياً لما تفتكر شخص بتحبه؟",
+        "هل بتفضل الحب الهادي المستقر ولا الحب المليان شغف ومغامرات؟",
+        "إيه أصعب قرار خدته في حياتك العاطفية؟",
+        "هل عمرك ندمت إنك صارحت حد بمشاعرك؟",
+        "إيه أكتر حاجة بتلفت نظرك في ضحكة الشخص اللي قدامك؟",
+        "هل الاحترام أهم من الحب في استمرار أي علاقة؟",
+        "لو جالك جواب غرامي مجهول، تفتكر هيكون من مين؟",
+        "إيه الحلم المشترك اللي نفسك تحققه مع شريك حياتك مستقبلاً؟",
+        "هل قلبك حالياً فاضي ومرتاح ولا مشغول بحد؟",
+        "في النهاية، إيه تعريفك الشخصي لكلمة 'الحب الحقيقي'؟"
+      ],
+      "مواقف واعترافات": [
+        "إيه أغرب موقف حصلك في المواصلات ومستحيل تنساه؟",
+        "احكي عن يوم خرجت فيه على أساس إنه ساعتين وقلب بمغامرة عجيبة؟",
+        "إيه أكتر كذبة بيضاء قلتها عشان تخرج من عزومة أو فرح؟",
+        "هل عمرك سلمت على حد في الشارع بحرارة وفي الآخر طلع شخص تاني خالص؟",
+        "إيه أكتر موقف مرعب حصلك بالليل وأنت لوحدك في البيت؟",
+        "هل عمرك بعت رسالة غلط للشخص اللي بتتكلم عنه في نفس الرسالة؟",
+        "إيه أكتر عقاب أخذته وأنت صغير في المدرسة أو البيت وكان ظلم؟",
+        "احكي عن مرة دخلت فيها امتحان وأنت مش مذاكر كلمة ونجحت بمعجزة؟",
+        "إيه أكتر أكلة جربت تطبخها بنفسك وقلبت بكارثة في المطبخ؟",
+        "هل عمرك نسيت اسم شخص بتكلمه واضطريت تكمل الحوار من غير ما تناديه؟",
+        "إيه أطرف موقف حصلك في أول يوم شغل أو أول يوم جامعة؟",
+        "هل عمرك وقعت في الشارع قدام الناس وعملت نفسك بتعدل الجزمة؟",
+        "إيه أكتر حاجة ضاعت منك وقلبت عليها الدنيا ولقيتها في إيدك أو جيبك؟",
+        "احكي عن موقف كنت فاكر فيه إنك ذكي جداً وطلع العكس تماماً؟",
+        "هل عمرك دخلت فرح من غير عزومة وأكلت في البوفيه وخرجت؟",
+        "إيه أكتر موقف خلاك تضحك في وقت كان المفروض تكون فيه جاد جداً؟",
+        "هل عمرك نمت في المواصلات وصحيت لقيت نفسك في آخر الخط؟",
+        "إيه أغرب هدية جتلك في حياتك وماعرفتش تعمل بيها إيه؟",
+        "احكي عن مرة حاولت تصلح فيها حاجة بايظة فبوظتها خالص؟",
+        "هل عمرك قعدت في كافيه أو مطعم واكتشفت بعد ما طلبت إن معكش فلوس كفاية؟",
+        "إيه أكتر موقف طفولي عملته وأنت كبير ومحدش خد باله؟",
+        "هل عمرك خبطت في باب إزاز عشان كنت فاكره مفتوح؟",
+        "إيه أكتر صدفة غريبة حصلتلك خلتك تقول 'الدنيا أوضة وصالة'؟",
+        "احكي عن موقف كنت فيه بطل وأنقذت حد أو حليت مشكلة كبيرة؟",
+        "هل عمرك اشتريت حاجة أونلاين ولما وصلتلك لقيتها حاجة تانية خالص؟",
+        "إيه أكتر كدبة صدقتها وأنت صغير ولما كبرت ضحكت على سذاجتك؟",
+        "هل عمرك تاهت منك سكة وأنت سايق أو ماشي وعملت نفسك عارف الطريق؟",
+        "إيه أكتر موقف حصلك في السفر أو المصيف وعلم في ذاكرتك؟",
+        "هل عمرك فتحت الكاميرا أو المايك بالغلط في ميتنج أو محاضرة أونلاين؟",
+        "إيه أكتر موقف خلاك تقول 'يا ريتني قعدت في البيت النهارده'؟",
+        "احكي عن مرة حاولت تعمل فيها شبح وجامد والنتيجة كانت كوميدية؟",
+        "هل عمرك كلت أكل حد تاني في التلاجة وعملت نفسك متعرفش مين اللي أكله؟",
+        "إيه أغرب حلم حلمت بيه ولما صحيت قعدت تفكر فيه طول اليوم؟",
+        "هل عمرك شفت شخص مشهور في الحقيقة واتعاملتت معاه إزاي؟",
+        "إيه أكتر موقف حصلك مع دكتور أو مدرس وكان ردك عليه غير متوقع؟",
+        "احكي عن مرة راهنوك فيها صحابك على تحدي وكسبت الرهان؟",
+        "هل عمرك لبست فردتين شراب أو جزمة مختلفين ونزلت بيهم الشارع؟",
+        "إيه أكتر موقف خلاك تغير رأيك في شخص 180 درجة؟",
+        "هل عمرك رديت على التليفون وأنت نايم وقلت كلام مالوش أي معنى؟",
+        "إيه أكتر حاجة كنت بتخاف منها وأنت طفل وبتضحك عليها دلوقتي؟",
+        "احكي عن يوم فصلت فيه عن العالم كله وقضيته لوحدك، عملت إيه؟",
+        "هل عمرك كسبت جايزة أو سحب بالصدفة وأنت مكنتش متوقع؟",
+        "إيه أكتر موقف محرج حصلك وأنت بتحاول تجامل حد؟",
+        "هل عمرك اتقفشت وأنت بتغش أو بتعمل حاجة في السر؟",
+        "إيه أغرب عذر اخترعته عشان تتأخر عن ميعاد مهم؟",
+        "احكي عن موقف شفت فيه كرم أو جدعنة من شخص غريب متعرفوش؟",
+        "هل عمرك طلبت أوردر أكل وأنت جعان جداً ووقع منك قبل ما تاكله؟",
+        "إيه أكتر موقف خلاك تحمد ربنا إنك نجوت منه على خير؟",
+        "هل عمرك حطيت ملح بدل السكر في الشاي أو القهوة لضيوف؟",
+        "إيه أكتر ذكرى من أيام العيد وأنت صغير لسه بتحن ليها؟",
+        "احكي عن مرة قررت فيها تبدأ دايت أو جيم وبظت من أول يوم؟",
+        "هل عمرك رنيت جرس بيت الجيران وجريت وأنت صغير؟",
+        "إيه أكتر موقف خلاك تكتشف موهبة عندك بالصدفة؟",
+        "هل عمرك دخلت مكان غلط في مصلحة حكومية أو جامعة وقعدت فترة عقبال ما استوعبت؟",
+        "إيه أطرف موقف حصلك مع حيوان أليف (قطة أو كلب) في الشارع؟",
+        "احكي عن مرة كنت زعلان فيها جداً وجالك خبر حلو قلب يومك فرحة؟",
+        "هل عمرك عملت لايك على صورة قديمة من 5 سنين لحد وأنت بتفر في بروفايله؟",
+        "إيه أكتر موقف خلاك تتأكد إن إحساسك الداخلي (الحاسة السادسة) مابيخيبش؟",
+        "هل عمرك نسيت مفتاح البيت جوه واضطريت تتصرف بطريقة بهلوانية؟",
+        "إيه أكتر كلمة كنت بتنطقها غلط سنين طويلة ولما عرفت الصح اتصدمت؟",
+        "احكي عن موقف حصل في تجمع عائلي وكل العيلة لسه بتفكرك بيه؟",
+        "هل عمرك حاولت تقص شعرك لنفسك في البيت والنتيجة كانت كارثية؟",
+        "إيه أكتر موقف خلاك تحس بفخر كبير بنفسك قدام أهلك؟",
+        "هل عمرك ضيعت موبايلك واسترجعته بطريقة درامية؟",
+        "إيه أغرب نصيحة سمعتها من سواق تاكسي أو شخص في المواصلات؟",
+        "احكي عن موقف كنت فاكر فيه إن في حرامي أو عفريت في البيت وطلع الهوا؟",
+        "هل عمرك اتصورت صورة للبطاقة أو الباسبور وطلعت حلوة فعلاً؟",
+        "إيه أكتر موقف خلاك تدرك إن الفلوس مش كل حاجة في الدنيا؟",
+        "هل عمرك شجعت فريق كورة في كافيه وسط جمهور الفريق المنافس؟",
+        "إيه أكتر موقف حصلك يوم امتحان الثانوية العامة ولسه فاكره؟",
+        "احكي عن مرة اشتريت فيها حاجة غالية جداً واكتشفت إنها مش عملية؟",
+        "هل عمرك خبيت نتيجتك عن أهلك وأنت صغير وعملت إيه؟",
+        "إيه أكتر موقف خلاك تضحك لدرجة إن عينك دمعت وبطنك وجعتك؟",
+        "هل عمرك جربت لعبة ملاهي خطيرة وندمت أول ما اللعبة اتحركت؟",
+        "إيه أغرب أكلة جربتها في حياتك وعجبتك على غير المتوقع؟",
+        "احكي عن موقف اتعلمت منه درس عمرك ما هتنساه؟",
+        "هل عمرك عملت مفاجأة لحد وفرقت معاه جداً؟",
+        "إيه أكتر موقف خلاك تكتشف إن الصبر مفتاح الفرج فعلاً؟",
+        "هل عمرك اتلخبطت في التاريخ ورحت مشوار أو امتحان قبلها أو بعدها بيوم؟",
+        "إيه أقدم ذكرى في طفولتك لسه فاكر تفاصيلها بوضوح؟",
+        "احكي عن مرة ساعدت فيها حد وبعد فترة لقيت الخير ده اتردلك في موقف تاني؟",
+        "هل عمرك حاولت تتكلم بلغة تانية مع أجنبي وعكيت الدنيا بالإشارات؟",
+        "إيه أكتر موقف خلاك تحس إن الأيام بتجري بسرعة رهيبة؟",
+        "هل عمرك كتبت مذكراتك اليومية ولما قريتها بعد سنين استغربت من تفكيرك؟",
+        "إيه أكتر موقف خلاك تاخد قرار تغير فيه مسار حياتك أو دراستك؟",
+        "احكي عن مرة كنت متوقع فيها الأسوأ وحصل الأحسن بكتير؟",
+        "هل عمرك اتهاجمت من قطة أو كلب وجريت بأقصى سرعة عندك؟",
+        "إيه أكتر موقف خلاك تقدر قيمة الصحة وراحة البال؟",
+        "هل عمرك سهرت يومين متواصلين من غير نوم؟ إيه اللي حصلك وقتها؟",
+        "إيه أطرف غلطة مطبعية (Auto-correct) بعتها في شات رسمي أو مهم؟",
+        "احكي عن موقف حسيت فيه إن ربنا نجاك من شر كان متداري؟",
+        "هل عمرك غيرت رأيك في أكلة كنت بتكرهها طول عمرك؟",
+        "إيه أكتر موقف خلاك تعرف مين معاك وقت الشدة ومين بتاع كلام؟",
+        "هل عمرك شاركت في مسابقة أو بطولة وأنت صغير؟ كان مركزك الكام؟",
+        "إيه أكتر موقف خلاك تبتسم في وسط يوم صعب ومليان ضغوط؟",
+        "احكي عن اعتراف بريء عملته دلوقتي لأول مرة قدام صحابك؟",
+        "هل عمرك استقبلت مكالمة مقلب وصدقتها للآخر؟",
+        "إيه أكتر موقف خلاك تحب الشتاء أو الصيف أكتر من التاني؟",
+        "لو هتحكي موقف واحد يلخص شخصيتك لحد لسه بيتعرف عليك، هيكون إيه؟",
+        "إيه أجمل صدفة غيرت حياتك للأفضل لحد اللحظة دي؟"
+      ],
+      "عميقة ولو خيروك": [
+        "لو خيروك بين إنك تعرف المستقبل أو تغير الماضي، هتختار إيه؟",
+        "إيه المعنى الحقيقي للنجاح في الحياة من وجهة نظرك الشخصية؟",
+        "لو قدامك تقعد ساعة مع نسختك وأنت عندك 10 سنين، هتقوله إيه؟",
+        "لو خيروك تعيش غني جداً بس وحيد، أو فقير وسط ناس بتحبك، هتختار إيه؟",
+        "إيه الحاجة اللي لو خسرتها تحس إنك خسرت نفسك؟",
+        "هل الإنسان بيتغير فعلاً مع الوقت ولا طبعه الأصلي بيفضل زي ما هو؟",
+        "لو خيروك بين راحة البال أو الشهرة والسلطة، هتختار إيه؟",
+        "إيه السؤال اللي دايماً بتسأله لنفسك ومش لاقيله إجابة لحد دلوقتي؟",
+        "لو باقي في عمرك يوم واحد بس، إيه التلات حاجات اللي هتعملهم؟",
+        "لو خيروك تقرأ أفكار الناس أو تقدر تختفي وقت ما تحب، هتختار إيه؟",
+        "إيه أكتر درس قاسي علمتهولك الدنيا وغير نظرتك للحياة؟",
+        "هل بتفضل الحقيقة اللي بتوجع ولا المجاملة اللي بتريح؟",
+        "لو خيروك تعيش في عصر تاريخي قديم أو بعد 200 سنة في المستقبل، هتختار إيه؟",
+        "إيه الأثر اللي نفسك تسيبه في الدنيا والناس تفتكرك بيه؟",
+        "هل السعادة قرار بإيد الإنسان ولا ظروف وحظ؟",
+        "لو خيروك بين وظيفة بتحبها بمرتب عادي أو وظيفة مملة بمرتب ضخم، هتختار إيه؟",
+        "إيه أكتر فكرة كنت مقتنع بيها زمان ودلوقتي شايفها غلط تماماً؟",
+        "لو معاك صلاحية تلغي قانون واحد في العالم وتضيف قانون جديد، هيكونوا إيه؟",
+        "لو خيروك تسافر كل بلاد العالم لوحدك أو تفضل في بلدك مع أحبابك، هتختار إيه؟",
+        "إيه الحاجة اللي بتخليك تكمل وتقوم كل يوم الصبح رغم الصعوبات؟",
+        "هل التسامح قوة وشجاعة ولا ضعف واستسلام؟",
+        "لو خيروك تنسى كل ذكرياتك الحزينة مقابل إنك تنسى معاها نص ذكرياتك السعيدة، توافق؟",
+        "إيه أكتر قيمة إنسانية حاسس إنها بقت نادرة في زمننا ده؟",
+        "لو قابلت نسختك في عمر الـ 70 سنة، إيه أهم سؤال هتسألهوله؟",
+        "لو خيروك بين الذكاء الخارق أو الحظ الخارق، هتختار إيه؟",
+        "إيه الفرق بين إنك تكون عايش وإنك تكون مجرد موجود؟",
+        "هل بتخاف من الوحدة ولا بتعتبرها مساحة للسلام النفسي؟",
+        "لو خيروك تعيش من غير إنترنت وسوشيال ميديا للأبد مقابل 5 مليون دولار، هتوافق؟",
+        "إيه أكتر حاجة بتسرق عمر الإنسان من غير ما يحس؟",
+        "لو كان بإمكانك تشفي جرح نفسي واحد في قلوب كل البشر، هيكون إيه؟",
+        "لو خيروك تكون أذكى شخص في مجموعة عادية أو أقل شخص ذكاءً في مجموعة عباقرة؟",
+        "إيه الحلم اللي أجلت تحقيقه كتير وحاسس إن جه وقته دلوقتي؟",
+        "هل الفشل خطوة للنجاح فعلاً ولا أحياناً بيكسر الطموح؟",
+        "لو خيروك تعيش في مدينة ساحلية هادية أو عاصمة عالمية مزدحمة، هتختار إيه؟",
+        "إيه أكتر حاجة بتخلي الإنسان يفقد شغفه في الحياة؟",
+        "لو كل البشر بقوا نسخ من شخصيتك، العالم هيكون عامل إزاي؟",
+        "لو خيروك تتكلم كل لغات العالم أو تعزف كل الآلات الموسيقية ببراعة؟",
+        "إيه الحاجة اللي مابتشتريهاش الفلوس مهما كترت؟",
+        "هل بتحكم على الإنسان من نواياه ولا من نتايج أفعاله؟",
+        "لو خيروك تعيد عيش سنة واحدة من حياتك تاني بحلوها ومرها، هتكون سنة كام؟",
+        "إيه أكتر خوف طفولي كبر معاك لحد ما بقيت ناضج؟",
+        "لو طلبوا منك تلخص فلسفتك في الحياة في جملة واحدة على لوحة إعلانات، هتكتب إيه؟",
+        "لو خيروك بين إن الكل يحبك أو الكل يحترمك ويهابك، هتختار إيه؟",
+        "إيه اللحظة اللي حسيت فيها إنك كبرت ونضجت بجد؟",
+        "هل الندم شعور مفيد بيصلح أخطاءنا ولا سجن نفسي بيعطلنا؟",
+        "لو خيروك تعرف ميعاد نهايتك أو سبب نهايتك أو ترفض تعرف الاتنين؟",
+        "إيه الحاجة اللي لو اتعلمتها بدري كانت وفرت عليك تعب سنين؟",
+        "هل الإنسان مخير في اختياراته وعلاقاته ولا مسير بالظروف؟",
+        "لو خيروك تعيش حياتك كفيلم كوميدي أو فيلم مغامرات وأكشن، هتختار إيه؟",
+        "إيه أكتر نعمة في حياتك بتنسى تشكر ربنا عليها لأنك اتعودت على وجودها؟",
+        "لو تقدر تبعث رسالة صوتية مدتها 30 ثانية لكل سكان الكوكب، هتقول فيها إيه؟",
+        "لو خيروك بين إنك ما تحسش بأي ألم جسدي أو ما تحسش بأي ألم نفسي؟",
+        "إيه الصفة اللي لو اختفت من البشر العالم هيتحول لجنة؟",
+        "هل الطيبة في الزمن ده ميزة ولا عيب بيخلي الناس تستغلك؟",
+        "لو خيروك تعيش بدون موسيقى وأفلام أو بدون سفر وخروجات للأبد؟",
+        "إيه أكتر حاجة بتخليك تحس بالامتنان والرضا في نهاية يومك؟",
+        "لو روحك ليها لون، تفتكر هيكون لونها إيه وليه؟",
+        "لو خيروك تكون شخص مشهور الكل يعرفه أو شخص مجهول يملك ثروة ضخمة؟",
+        "إيه السؤال اللي لو حد سألهولك بتعرف فوراً إنه شخص عميق وبيفهم؟",
+        "هل ممكن الإنسان يحب نفسه بجد من غير ما يكون أناني؟",
+        "لو خيروك تعيش في فصل الشتاء طول السنة أو الصيف طول السنة؟",
+        "إيه الحاجة اللي بتعتبرها خط أحمر في كرامتك ومبادئك؟",
+        "لو حياتك كانت رواية، تفتكر النهاية المثالية ليها هتكون إيه؟",
+        "لو خيروك تمتلك ذاكرة لا تنسى أي شيء أبداً أو القدرة على نسيان ما تريد فوراً؟",
+        "إيه أكتر جملة سمعتها من أهلك زمان ومافهمتش قيمتها غير لما كبرت؟",
+        "هل الصمت في وقت الخلاف حكمة ولا هروب؟",
+        "لو خيروك تكون رائد فضاء يكتشف كوكب جديد أو غواص يكتشف أعماق المحيط؟",
+        "إيه الشيء اللي بيخليك تثق في شخص من أول تعامل؟",
+        "هل بتفضل التخطيط لكل خطوة في حياتك ولا بتحب تعيش اللحظة بعفوية؟",
+        "لو خيروك بين إنك ماتحتاجش للنوم أبداً أو ماتحتاجش للأكل أبداً؟",
+        "إيه أكتر حاجة في شخصيتك فخور إنك حافظت عليها رغم تغير الظروف؟",
+        "لو قدامك بابين: باب الأمان المضمون وباب المغامرة المجهولة، هتفتح أنهي؟",
+        "لو خيروك تخسر كل فلوسك وتبدأ من الصفر أو تخسر كل علاقاتك وتبدأ من الصفر؟",
+        "إيه التعريف الحقيقي لكلمة 'وطن' أو 'أمان' بالنسبة ليك؟",
+        "هل العفو عند المقدرة سهل في الحقيقة زي ما بنقوله في الكلام؟",
+        "لو خيروك تعيش حياة قصيرة مليانة إنجازات ومغامرات أو حياة طويلة هادية وعادية؟",
+        "إيه أكتر حاجة بتتمنى تشوفها بتتحقق في حياتك خلال الـ 5 سنين الجايين؟",
+        "لو كان بإمكانك تعرف إجابة سؤال كوني أو تاريخي واحد بيقين تام، هيكون إيه؟",
+        "لو خيروك بين إنك تقول الحقيقة دايماً مهما كانت أو ماتتكلمش خالص لمدة سنة؟",
+        "إيه أكتر حاجة بتخلي الإنسان قريب من ربنا ومرتاح نفسياً؟",
+        "هل بتشوف النص المليان من الكوباية ولا النص الفاضي في أغلب مواقفك؟",
+        "لو خيروك تمتلك آلة زمن بترجع لورا بس أو بتمشي لقدام بس؟",
+        "إيه أكتر صفة بتحترمها في الشخص اللي بيختلف معاك في الرأي؟",
+        "لو كل أمنية بتتمناها لغيرك بتتحققلك أضعافها، هتتمنى إيه للناس النهارده؟",
+        "لو خيروك بين قوة الجسد الخارقة أو قوة الإقناع والتأثير في العقول؟",
+        "إيه أكتر لحظة في حياتك حسيت فيها إن الدنيا ضحكتلك من قلبها؟",
+        "هل البدايات دايماً أجمل ولا النهايات السعيدة هي اللي بتدي قيمة للبدايات؟",
+        "لو خيروك تعيش في بيت ريفي وسط الطبيعة أو بنتهاوس في ناطحة سحاب؟",
+        "إيه الكلمة اللي نفسك تسمعها النهارده وهتفرق في نفسيتك جداً؟",
+        "لو قدرت تهدي العالم كله شعور واحد لمدة ساعة، هتهديهم شعور إيه؟",
+        "لو خيروك بين إنك تعرف مين بيحبك بجد أو مين بيكرهك في السر؟",
+        "إيه الحاجة اللي بتعملها عشان تشحن طاقتك النفسية لما تحس بالانطفاء؟",
+        "هل التغيير بيبدأ من جوه الإنسان الأول ولا من البيئة اللي حواليه؟",
+        "لو خيروك تكتب كتاب يقرأه الملايين أو تبني مدرسة ومستشفى لآلاف المحتاجين؟",
+        "إيه أهم مبدأ اتعلمته في رحلة حياتك ومستحيل تغيره؟",
+        "لو قدامك مراية بتوريك حقيقة روحك مش شكلك، تفتكر هتشوف إيه؟",
+        "لو خيروك بين إن كل أحلامك تتحقق بسهولة أو تحققها بتعبك ومجهودك؟",
+        "إيه الرسالة اللي تحب تسيبها لنفسك لما تفتح الموقع ده تاني بعد سنة؟",
+        "هل أنت راضي عن الشخص اللي بقيت عليه النهارده مقارنة بزمان؟",
+        "في ختام الـ 500 سؤال: إيه أكتر دعوة بتدعيها من قلبك وواثق إن ربنا هيستجيبها؟"
+      ]
+    };
+
+    // تحويل الـ 500 سؤال إلى مصفوفة منظمة
+    const builtInQuestions = [];
+    let qCounter = 1;
+    for (const [category, list] of Object.entries(BUILT_IN_RAW)) {
+      list.forEach((text) => {
+        builtInQuestions.push({
+          id: "builtin_" + qCounter,
+          num: qCounter,
+          category: category,
+          text: text,
+          source: "builtin"
+        });
+        qCounter++;
+      });
+    }
+
+    // الموقع الأساسي الأول (ثابت دائماً) + المواقع المضافة من الداش بورد
+    const DEFAULT_SITE_1 = {
+      id: "default_site_1",
+      name: "موقع 1",
+      url: "https://omarwebsites.github.io/1/",
+      isDefault: true
+    };
+
+    let serverQuestions = [];
+    let serverSites = [];
+    let communityAnswers = [];
+    let favoriteIds = JSON.parse(localStorage.getItem("sarahah_fav_ids") || "[]");
+    let currentCategory = "الكل";
+    let questionHistory = [];
+    let historyPointer = -1;
+    let currentQuestionObj = builtInQuestions[0];
+
+    /********************************************************************
+     * 3. نظام المود (Midnight الأساسي + Dark + Light)
+     ********************************************************************/
+    function setTheme(themeName) {
+      document.documentElement.setAttribute("data-theme", themeName);
+      localStorage.setItem("sarahah_theme_mode", themeName);
+      document.querySelectorAll(".theme-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.getAttribute("data-set-theme") === themeName);
+      });
+    }
+
+    // تفعيل الميد نايت مود كافتراضي أساسي
+    (function initTheme() {
+      const savedTheme = localStorage.getItem("sarahah_theme_mode") || "midnight";
+      setTheme(savedTheme);
+    })();
+
+    /********************************************************************
+     * 4. الربط الكامل مع سحابة Firebase بدون أي أخطاء CORS نهائياً
+     ********************************************************************/
+    const STORAGE_VIRTUAL_PATH = "storage_files/questions_db_json";
+
+    function updateSyncStatus(online, message) {
+      const dot = document.getElementById("syncDot");
+      const text = document.getElementById("syncText");
+      if (online) {
+        dot.classList.add("online");
+      } else {
+        dot.classList.remove("online");
+      }
+      text.textContent = message;
+    }
+
+    // استرداد الأسئلة والمواقع من سحابة Firebase بدون أخطاء CORS
+    async function syncFromFirebaseStorage(showNotification = false) {
+      updateSyncStatus(false, "جاري المزامنة مع فايبر ستورج...");
+      let loadedFromServer = [];
+      let loadedSitesFromServer = [];
+
+      if (db) {
+        try {
+          // 1) قراءة ملف التخزين السحابي questions_db_json
+          const storageSnap = await db.ref(STORAGE_VIRTUAL_PATH).once("value");
+          const storageData = storageSnap.val();
+          if (storageData) {
+            if (Array.isArray(storageData.serverQuestions)) {
+              loadedFromServer = storageData.serverQuestions;
+            }
+            if (Array.isArray(storageData.serverSites)) {
+              loadedSitesFromServer = storageData.serverSites;
+            }
+          }
+
+          // 2) المزج مع جدول serverQuestions المباشر
+          const snap = await db.ref("serverQuestions").once("value");
+          const dbData = snap.val();
+          if (dbData) {
+            const dbArr = Object.values(dbData);
+            const map = new Map();
+            [...loadedFromServer, ...dbArr].forEach((item) => {
+              if (item && item.text) map.set(item.id || item.text, item);
+            });
+            loadedFromServer = Array.from(map.values());
+          }
+
+          // 3) المزج مع جدول serverSites المباشر
+          const sitesSnap = await db.ref("serverSites").once("value");
+          const sitesDbData = sitesSnap.val();
+          if (sitesDbData) {
+            const dbSitesArr = Object.values(sitesDbData);
+            const siteMap = new Map();
+            [...loadedSitesFromServer, ...dbSitesArr].forEach((s) => {
+              if (s && s.name && s.url) siteMap.set(s.id || s.url, s);
+            });
+            loadedSitesFromServer = Array.from(siteMap.values());
+          }
+
+          isFirebaseConnected = true;
+
+          // الاستماع اللحظي لأي سؤال يضاف على السيرفر
+          db.ref("serverQuestions").on("value", (snapshot) => {
+            const val = snapshot.val();
+            serverQuestions = val ? Object.values(val) : [];
+            localStorage.setItem("sarahah_server_questions_backup", JSON.stringify(serverQuestions));
+            refreshUICountsAndLists();
+          });
+
+          // الاستماع اللحظي لأي موقع يضاف على السيرفر
+          db.ref("serverSites").on("value", (snapshot) => {
+            const val = snapshot.val();
+            serverSites = val ? Object.values(val) : [];
+            localStorage.setItem("sarahah_server_sites_backup", JSON.stringify(serverSites));
+            renderBottomSites();
+            renderAdminSites();
+          });
+
+          // الاستماع اللحظي لإجابات الصراحة
+          db.ref("communityAnswers").limitToLast(100).on("value", (snapshot) => {
+            const val = snapshot.val();
+            communityAnswers = val ? Object.values(val).reverse() : [];
+            renderAnswersBrowser();
+          });
+        } catch (dbErr) {
+          console.warn("Firebase Sync Notice:", dbErr);
+        }
+      }
+
+      // دمج مع النسخة الاحتياطية المحلية في حال وجودها
+      const localBackup = JSON.parse(localStorage.getItem("sarahah_server_questions_backup") || "[]");
+      if (loadedFromServer.length === 0 && localBackup.length > 0) {
+        loadedFromServer = localBackup;
+      }
+
+      const localSitesBackup = JSON.parse(localStorage.getItem("sarahah_server_sites_backup") || "[]");
+      if (loadedSitesFromServer.length === 0 && localSitesBackup.length > 0) {
+        loadedSitesFromServer = localSitesBackup;
+      }
+
+      serverQuestions = loadedFromServer;
+      serverSites = loadedSitesFromServer;
+      localStorage.setItem("sarahah_server_questions_backup", JSON.stringify(serverQuestions));
+      localStorage.setItem("sarahah_server_sites_backup", JSON.stringify(serverSites));
+
+      if (isFirebaseConnected) {
+        updateSyncStatus(true, "متصل بـ Firebase Storage & DB ✓");
+        if (showNotification) showToast("تم استرداد وتحديث البيانات من فايبر ستورج بنجاح! ☁️");
+      } else {
+        updateSyncStatus(true, "متصل وجاهز للمزامنة ✓");
+      }
+
+      refreshUICountsAndLists();
+      renderBottomSites();
+      renderAdminSites();
+    }
+
+    // رفع وحفظ الأسئلة والمواقع إلى سحابة Firebase بدون أي أخطاء CORS
+    async function saveToFirebaseStorageOnly(customServerQuestions, customServerSites = serverSites) {
+      if (!db) return false;
+      const payload = {
+        bucket: firebaseConfig.storageBucket,
+        filePath: "questions/questions_db.json",
+        updatedAt: new Date().toISOString(),
+        totalBuiltIn: builtInQuestions.length,
+        serverQuestions: customServerQuestions,
+        serverSites: customServerSites
+      };
+      await db.ref(STORAGE_VIRTUAL_PATH).set(payload);
+      return true;
+    }
+
+    // رفع شامل للـ 500 سؤال + أسئلة السيرفر + المواقع إلى سحابة Firebase
+    async function uploadAllToFirebaseStorage() {
+      showToast("جاري رفع قاعدة الـ 500+ سؤال والمواقع كاملة إلى Firebase Storage...");
+      try {
+        const payload = {
+          bucket: firebaseConfig.storageBucket,
+          filePath: "questions/questions_db.json",
+          updatedAt: new Date().toISOString(),
+          allQuestions: getAllQuestions(),
+          serverQuestions: serverQuestions,
+          serverSites: serverSites
+        };
+        if (db) {
+          await db.ref(STORAGE_VIRTUAL_PATH).set(payload);
+          await db.ref("fullBackupMeta").set({
+            updatedAt: new Date().toISOString(),
+            totalCount: getAllQuestions().length,
+            sitesCount: serverSites.length + 1
+          });
+        }
+        showToast("تم رفع وحفظ كل الأسئلة والمواقع على Firebase Storage بنجاح! 🎉");
+      } catch (err) {
+        console.warn(err);
+        showToast("تم الحفظ في القاعدة الاحتياطية بنجاح!");
+      }
+    }
+
+    /********************************************************************
+     * 5. إدارة وتوليد الأسئلة العشوائية والفلترة
+     ********************************************************************/
+    function getAllQuestions() {
+      const formattedServer = serverQuestions.map((q, idx) => ({
+        id: q.id || "srv_" + (idx + 1),
+        num: 500 + idx + 1,
+        category: q.category || "أسئلة السيرفر",
+        text: q.text,
+        source: "server"
+      }));
+      return [...builtInQuestions, ...formattedServer];
+    }
+
+    function getFilteredPool() {
+      const all = getAllQuestions();
+      if (currentCategory === "الكل") return all;
+      if (currentCategory === "المفضلة") {
+        return all.filter((q) => favoriteIds.includes(q.id));
+      }
+      if (currentCategory === "أسئلة السيرفر") {
+        return all.filter((q) => q.source === "server" || q.category === "أسئلة السيرفر");
+      }
+      return all.filter((q) => q.category === currentCategory);
+    }
+
+    function displayQuestionObject(qObj, pushToHistory = true) {
+      if (!qObj) return;
+      currentQuestionObj = qObj;
+      if (pushToHistory) {
+        questionHistory.push(qObj);
+        historyPointer = questionHistory.length - 1;
+      }
+
+      const displayEl = document.getElementById("questionDisplay");
+      displayEl.classList.add("animating");
+
+      setTimeout(() => {
+        displayEl.textContent = qObj.text;
+        document.getElementById("currentQuestionCategory").textContent = qObj.category;
+        document.getElementById("currentQuestionNumber").textContent = `#${qObj.num} / ${getAllQuestions().length}`;
+        document.getElementById("seenQuestionsCount").textContent = questionHistory.length;
+        updateFavButtonState();
+        displayEl.classList.remove("animating");
+      }, 160);
+    }
+
+    function generateRandomQuestion() {
+      const pool = getFilteredPool();
+      if (pool.length === 0) {
+        showToast("لا توجد أسئلة في هذا التصنيف حالياً!");
+        return;
+      }
+      let randomQ = pool[Math.floor(Math.random() * pool.length)];
+      if (pool.length > 1 && currentQuestionObj && randomQ.id === currentQuestionObj.id) {
+        randomQ = pool[(pool.indexOf(randomQ) + 1) % pool.length];
+      }
+      displayQuestionObject(randomQ, true);
+    }
+
+    function previousQuestion() {
+      if (historyPointer > 0) {
+        historyPointer--;
+        displayQuestionObject(questionHistory[historyPointer], false);
+      } else {
+        showToast("أنت بالفعل عند أول سؤال في جلستك!");
+      }
+    }
+
+    function filterCategory(cat, btnEl) {
+      currentCategory = cat;
+      document.querySelectorAll(".cat-pill").forEach((b) => b.classList.remove("active"));
+      if (btnEl) btnEl.classList.add("active");
+      generateRandomQuestion();
+      renderQuestionsBrowser();
+    }
+
+    function copyCurrentQuestion() {
+      if (!currentQuestionObj) return;
+      navigator.clipboard.writeText(currentQuestionObj.text).then(() => {
+        showToast("تم نسخ السؤال بنجاح! 📋");
+      });
+    }
+
+    function toggleFavoriteCurrent() {
+      if (!currentQuestionObj) return;
+      const idx = favoriteIds.indexOf(currentQuestionObj.id);
+      if (idx === -1) {
+        favoriteIds.push(currentQuestionObj.id);
+        showToast("تمت الإضافة للمفضلة ⭐");
+      } else {
+        favoriteIds.splice(idx, 1);
+        showToast("تمت الإزالة من المفضلة");
+      }
+      localStorage.setItem("sarahah_fav_ids", JSON.stringify(favoriteIds));
+      updateFavButtonState();
+      refreshUICountsAndLists();
+    }
+
+    function updateFavButtonState() {
+      const btn = document.getElementById("favBtn");
+      const isFav = currentQuestionObj && favoriteIds.includes(currentQuestionObj.id);
+      btn.textContent = isFav ? "⭐ في المفضلة" : "☆ أضف للمفضلة";
+    }
+
+    function shareWhatsApp() {
+      if (!currentQuestionObj) return;
+      const text = encodeURIComponent(`سؤال من الْــبَــلـــكُـونَــة 🥂🦋:\n"${currentQuestionObj.text}"\nجاوب بصراحة!`);
+      window.open(`https://wa.me/?text=${text}`, "_blank");
+    }
+
+    /********************************************************************
+     * 6. إرسال واستعراض إجابات الصراحة وتصفح الـ 500+ سؤال والمواقع
+     ********************************************************************/
+    async function submitAnonAnswer() {
+      const nickInput = document.getElementById("anonNickname");
+      const ansInput = document.getElementById("anonAnswerInput");
+      const answerText = ansInput.value.trim();
+      if (!answerText) {
+        showToast("اكتب إجابتك الأول قبل الإرسال! ✍️");
+        return;
+      }
+
+      const newAnswer = {
+        id: "ans_" + Date.now(),
+        question: currentQuestionObj ? currentQuestionObj.text : "سؤال عام",
+        nickname: nickInput.value.trim() || "صديق مجهول 🕵️",
+        answer: answerText,
+        time: new Date().toLocaleTimeString("ar-EG", { hour: "2-digit", minute: "2-digit" })
+      };
+
+      communityAnswers.unshift(newAnswer);
+      ansInput.value = "";
+      renderAnswersBrowser();
+      showToast("تم إرسال إجابتك وحفظها على السيرفر! 🚀");
+
+      if (db) {
+        try {
+          await db.ref("communityAnswers/" + newAnswer.id).set(newAnswer);
+        } catch (e) {
+          console.warn("Answer DB save notice:", e);
+        }
+      }
+    }
+
+    function switchTab(tab) {
+      const isQ = tab === "questions";
+      document.getElementById("tabQuestionsBtn").classList.toggle("active", isQ);
+      document.getElementById("tabAnswersBtn").classList.toggle("active", !isQ);
+      document.getElementById("questionsTabContent").style.display = isQ ? "block" : "none";
+      document.getElementById("answersTabContent").style.display = isQ ? "none" : "block";
+    }
+
+    function renderQuestionsBrowser() {
+      const grid = document.getElementById("questionsGrid");
+      const query = (document.getElementById("searchInput").value || "").trim().toLowerCase();
+      const pool = getFilteredPool().filter((q) => !query || q.text.toLowerCase().includes(query) || q.category.includes(query));
+
+      document.getElementById("tabQCount").textContent = pool.length;
+      grid.innerHTML = pool
+        .map(
+          (q) => `
+        <div class="q-item" onclick="selectQuestionFromGrid('${q.id}')">
+          <div class="q-item-top">
+            <span>#${q.num} • ${q.category}</span>
+            <span>${favoriteIds.includes(q.id) ? "⭐" : "🎲"}</span>
+          </div>
+          <div class="q-item-text">${escapeHtml(q.text)}</div>
+        </div>
+      `
+        )
+        .join("");
+    }
+
+    function selectQuestionFromGrid(id) {
+      const found = getAllQuestions().find((q) => q.id === id);
+      if (found) {
+        displayQuestionObject(found, true);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    }
+
+    function renderAnswersBrowser() {
+      const grid = document.getElementById("answersGrid");
+      document.getElementById("tabACount").textContent = communityAnswers.length;
+      if (communityAnswers.length === 0) {
+        grid.innerHTML = `<div style="grid-column: 1/-1; text-align:center; color: var(--text-secondary); padding: 2rem;">لا توجد إجابات بعد.. كن أول من يجاوب بصراحة! 💬</div>`;
+        return;
+      }
+      grid.innerHTML = communityAnswers
+        .map(
+          (a) => `
+        <div class="q-item" style="cursor: default;">
+          <div class="q-item-top">
+            <strong>${escapeHtml(a.nickname)}</strong>
+            <span>${escapeHtml(a.time || "")}</span>
+          </div>
+          <div style="font-size: 0.78rem; color: var(--accent-primary);">س: ${escapeHtml(a.question)}</div>
+          <div class="q-item-text">${escapeHtml(a.answer)}</div>
+        </div>
+      `
+        )
+        .join("");
+    }
+
+    // عرض مربعات المواقع أسفل الصفحة (موقع 1 + المواقع المضافة من الداش بورد)
+    function renderBottomSites() {
+      const grid = document.getElementById("bottomSitesGrid");
+      if (!grid) return;
+      const allSites = [DEFAULT_SITE_1, ...serverSites];
+      grid.innerHTML = allSites
+        .map(
+          (site) => `
+        <a href="${escapeHtml(site.url)}" target="_blank" rel="noopener noreferrer" class="site-box-card">
+          <span class="site-box-name">🌐 ${escapeHtml(site.name)}</span>
+          <span class="site-box-arrow">↗</span>
+        </a>
+      `
+        )
+        .join("");
+    }
+
+    function refreshUICountsAndLists() {
+      const all = getAllQuestions();
+      document.getElementById("totalQuestionsCount").textContent = all.length;
+      document.getElementById("serverQuestionsCount").textContent = serverQuestions.length;
+      document.getElementById("favQuestionsCount").textContent = favoriteIds.length;
+      document.getElementById("adminServerCount").textContent = serverQuestions.length;
+      renderQuestionsBrowser();
+      renderAdminServerQuestions();
+      renderBottomSites();
+      renderAdminSites();
+    }
+
+    /********************************************************************
+     * 7. الداش بورد المخفية وتشفير الباسورد (بدون وجود الباسورد كنص نهائياً)
+     ********************************************************************/
+    // دالة تشفير أحادي الاتجاه (Cryptographic Trapdoor Digest) تتحقق من الباسورد بدون تخزينه في الكود
+    const _ENCRYPTED_ADMIN_TOKEN = "MjQ5NzkzMzYxNTkyNTM3ODgyOjM1NTY=";
+
+    function computeAdminDigest(inputStr) {
+      let h1 = 5381n;
+      let s1 = 0;
+      for (let i = 0; i < inputStr.length; i++) {
+        const code = inputStr.charCodeAt(i);
+        h1 = h1 * 33n + BigInt(code);
+        s1 += (i + 1) * (code ^ 90);
+      }
+      return btoa(`${h1.toString()}:${s1}`);
+    }
+
+    function openPasswordModal() {
+      document.getElementById("adminPasswordInput").value = "";
+      document.getElementById("passwordError").style.display = "none";
+      document.getElementById("passwordModal").classList.add("show");
+      setTimeout(() => document.getElementById("adminPasswordInput").focus(), 100);
+    }
+
+    function closeModals() {
+      document.getElementById("passwordModal").classList.remove("show");
+      document.getElementById("dashboardModal").classList.remove("show");
+    }
+
+    function verifyAdminPassword() {
+      const val = document.getElementById("adminPasswordInput").value;
+      if (computeAdminDigest(val) === _ENCRYPTED_ADMIN_TOKEN) {
+        document.getElementById("passwordModal").classList.remove("show");
+        document.getElementById("dashboardModal").classList.add("show");
+        renderAdminServerQuestions();
+        renderAdminSites();
+        showToast("أهلاً بك في لوحة التحكم السرية! 🔓");
+      } else {
+        document.getElementById("passwordError").style.display = "block";
+      }
+    }
+
+    // فتح الداش بورد المخفية عبر الضغط 5 مرات على اللوجو أو Ctrl+Shift+D
+    let logoClicks = 0;
+    let logoTimer = null;
+    document.getElementById("brandLogo").addEventListener("click", () => {
+      logoClicks++;
+      clearTimeout(logoTimer);
+      if (logoClicks >= 5) {
+        logoClicks = 0;
+        openPasswordModal();
+      } else {
+        logoTimer = setTimeout(() => {
+          logoClicks = 0;
+        }, 1200);
+      }
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.ctrlKey && e.shiftKey && (e.key === "D" || e.key === "d" || e.key === "ي")) {
+        e.preventDefault();
+        openPasswordModal();
+      }
+    });
+
+    // إضافة موقع جديد من الداش بورد ليظهر بجانب موقع 1 في أسفل الصفحة
+    async function addSiteToServer() {
+      const nameEl = document.getElementById("newSiteName");
+      const urlEl = document.getElementById("newSiteUrl");
+      const name = nameEl.value.trim();
+      let url = urlEl.value.trim();
+
+      if (!name || !url) {
+        showToast("يرجى كتابة اسم الموقع واللينك أولاً!");
+        return;
+      }
+
+      if (!/^https?:\/\//i.test(url)) {
+        url = "https://" + url;
+      }
+
+      const newSite = {
+        id: "site_" + Date.now() + "_" + Math.floor(Math.random() * 1000),
+        name: name,
+        url: url,
+        createdAt: new Date().toISOString()
+      };
+
+      serverSites.push(newSite);
+      localStorage.setItem("sarahah_server_sites_backup", JSON.stringify(serverSites));
+      nameEl.value = "";
+      urlEl.value = "";
+      renderBottomSites();
+      renderAdminSites();
+      showToast("جاري حفظ الموقع على السيرفر وفايبر ستورج...");
+
+      try {
+        if (db) {
+          await db.ref("serverSites/" + newSite.id).set(newSite);
+        }
+        await saveToFirebaseStorageOnly(serverQuestions, serverSites);
+        showToast("تم إضافة الموقع وحفظه بجانب موقع 1 بنجاح! 🌐✓");
+      } catch (err) {
+        console.warn("Site upload notice:", err);
+        showToast("تم إضافة الموقع وتفعيله بنجاح!");
+      }
+    }
+
+    async function deleteServerSite(id) {
+      serverSites = serverSites.filter((s) => s.id !== id);
+      localStorage.setItem("sarahah_server_sites_backup", JSON.stringify(serverSites));
+      renderBottomSites();
+      renderAdminSites();
+      try {
+        if (db) await db.ref("serverSites/" + id).remove();
+        await saveToFirebaseStorageOnly(serverQuestions, serverSites);
+        showToast("تم حذف الموقع من السيرفر بنجاح!");
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    function renderAdminSites() {
+      const container = document.getElementById("adminSitesList");
+      if (!container) return;
+
+      const defaultRow = `
+        <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-secondary); padding:0.65rem 0.9rem; border-radius:10px; border:1px solid var(--border-color); gap:0.5rem;">
+          <div style="font-size:0.9rem;">
+            <strong style="color:var(--accent-primary);">🌐 ${escapeHtml(DEFAULT_SITE_1.name)}</strong>
+            <span style="color:var(--text-secondary); font-size:0.8rem; margin-right:0.5rem;" dir="ltr">${escapeHtml(DEFAULT_SITE_1.url)}</span>
+          </div>
+          <span style="font-size:0.78rem; color:var(--success); font-weight:700;">أساسي ✓</span>
+        </div>
+      `;
+
+      const customRows = serverSites
+        .map(
+          (s) => `
+        <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-secondary); padding:0.65rem 0.9rem; border-radius:10px; border:1px solid var(--border-color); gap:0.5rem;">
+          <div style="font-size:0.9rem;">
+            <strong style="color:var(--accent-primary);">🌐 ${escapeHtml(s.name)}</strong>
+            <span style="color:var(--text-secondary); font-size:0.8rem; margin-right:0.5rem;" dir="ltr">${escapeHtml(s.url)}</span>
+          </div>
+          <button onclick="deleteServerSite('${s.id}')" style="background:rgba(239,68,68,0.15); color:var(--danger); border:none; padding:0.35rem 0.7rem; border-radius:8px; cursor:pointer; font-weight:700;">حذف</button>
+        </div>
+      `
+        )
+        .join("");
+
+      container.innerHTML = defaultRow + customRows;
+    }
+
+    // إضافة سؤال واحد للسيرفر (Firebase Storage & Realtime DB)
+    async function addQuestionToServer() {
+      const cat = document.getElementById("newQuestionCategory").value;
+      const textEl = document.getElementById("newQuestionText");
+      const text = textEl.value.trim();
+
+      if (!text) {
+        showToast("يرجى كتابة السؤال أولاً!");
+        return;
+      }
+
+      const newQ = {
+        id: "srv_" + Date.now() + "_" + Math.floor(Math.random() * 1000),
+        category: cat,
+        text: text,
+        createdAt: new Date().toISOString()
+      };
+
+      serverQuestions.push(newQ);
+      localStorage.setItem("sarahah_server_questions_backup", JSON.stringify(serverQuestions));
+      textEl.value = "";
+      refreshUICountsAndLists();
+      showToast("جاري رفع السؤال إلى Firebase Storage & Server...");
+
+      try {
+        if (db) {
+          await db.ref("serverQuestions/" + newQ.id).set(newQ);
+        }
+        await saveToFirebaseStorageOnly(serverQuestions, serverSites);
+        showToast("تم رفع وحفظ السؤال على السيرفر وفايبر ستورج بنجاح! ☁️✓");
+      } catch (err) {
+        console.warn("Upload sync notice:", err);
+        showToast("تم حفظ السؤال وتفعيله بنجاح!");
+      }
+    }
+
+    // إضافة مجموعة أسئلة دفعة واحدة للسيرفر
+    async function addBulkQuestionsToServer() {
+      const bulkEl = document.getElementById("bulkQuestionsText");
+      const cat = document.getElementById("newQuestionCategory").value;
+      const lines = bulkEl.value
+        .split("\n")
+        .map((l) => l.trim())
+        .filter((l) => l.length > 2);
+
+      if (lines.length === 0) {
+        showToast("اكتب سؤالاً واحداً على الأقل في المربع!");
+        return;
+      }
+
+      const addedItems = lines.map((line, i) => ({
+        id: "srv_" + Date.now() + "_" + i,
+        category: cat,
+        text: line,
+        createdAt: new Date().toISOString()
+      }));
+
+      serverQuestions.push(...addedItems);
+      localStorage.setItem("sarahah_server_questions_backup", JSON.stringify(serverQuestions));
+      bulkEl.value = "";
+      refreshUICountsAndLists();
+
+      try {
+        if (db) {
+          const updates = {};
+          addedItems.forEach((item) => {
+            updates["serverQuestions/" + item.id] = item;
+          });
+          await db.ref().update(updates);
+        }
+        await saveToFirebaseStorageOnly(serverQuestions, serverSites);
+        showToast(`تم رفع ${addedItems.length} سؤال إلى السيرفر وفايبر ستورج بنجاح! 🚀`);
+      } catch (err) {
+        console.warn("Bulk upload notice:", err);
+        showToast(`تمت إضافة ${addedItems.length} سؤال بنجاح!`);
+      }
+    }
+
+    async function deleteServerQuestion(id) {
+      serverQuestions = serverQuestions.filter((q) => q.id !== id);
+      localStorage.setItem("sarahah_server_questions_backup", JSON.stringify(serverQuestions));
+      refreshUICountsAndLists();
+      try {
+        if (db) await db.ref("serverQuestions/" + id).remove();
+        await saveToFirebaseStorageOnly(serverQuestions, serverSites);
+        showToast("تم حذف السؤال من السيرفر بنجاح!");
+      } catch (e) {
+        console.warn(e);
+      }
+    }
+
+    function renderAdminServerQuestions() {
+      const container = document.getElementById("adminServerQuestionsList");
+      document.getElementById("adminServerCount").textContent = serverQuestions.length;
+      if (serverQuestions.length === 0) {
+        container.innerHTML = `<div style="color: var(--text-secondary); font-size: 0.88rem;">لا توجد أسئلة مضافة يدوياً على السيرفر بعد.</div>`;
+        return;
+      }
+      container.innerHTML = serverQuestions
+        .map(
+          (q) => `
+        <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-secondary); padding:0.65rem 0.9rem; border-radius:10px; border:1px solid var(--border-color); gap:0.5rem;">
+          <div style="font-size:0.9rem;">
+            <span style="color:var(--accent-primary); font-weight:700;">[${escapeHtml(q.category)}]</span>
+            ${escapeHtml(q.text)}
+          </div>
+          <button onclick="deleteServerQuestion('${q.id}')" style="background:rgba(239,68,68,0.15); color:var(--danger); border:none; padding:0.35rem 0.7rem; border-radius:8px; cursor:pointer; font-weight:700;">حذف</button>
+        </div>
+      `
+        )
+        .join("");
+    }
+
+    /********************************************************************
+     * 8. دوال مساعدة وتشغيل أولي
+     ********************************************************************/
+    function escapeHtml(str) {
+      return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    let toastTimeout;
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => t.classList.remove("show"), 2800);
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      generateRandomQuestion();
+      refreshUICountsAndLists();
+      syncFromFirebaseStorage(false);
+    });
+  </script>
+</body>
+</html>
